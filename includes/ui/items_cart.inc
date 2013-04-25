@@ -95,12 +95,12 @@ class items_cart
 
 	// ----------- GL item functions
 
-	function add_gl_item($code_id, $dimension_id, $dimension2_id, $amount, $reference, $description=null)
+	function add_gl_item($code_id, $dimension_id, $dimension2_id, $amount, $reference, $description=null, $tax_net_amount=0)
 	{
 		if (isset($code_id) && $code_id != "" && isset($amount) && isset($dimension_id)  &&
 			isset($dimension2_id))
 		{
-			$this->gl_items[] = new gl_item($code_id, $dimension_id, $dimension2_id, $amount, $reference, $description);
+			$this->gl_items[] = new gl_item($code_id, $dimension_id, $dimension2_id, $amount, $reference, $description, $tax_net_amount);
 			return true;
 		}
 		else
@@ -112,12 +112,13 @@ class items_cart
 		return false;
 	}
 
-	function update_gl_item($index, $code_id, $dimension_id, $dimension2_id, $amount, $reference, $description=null)
+	function update_gl_item($index, $code_id, $dimension_id, $dimension2_id, $amount, $reference, $description=null, $tax_net_amount)
 	{
 	    $this->gl_items[$index]->code_id = $code_id;
 		$this->gl_items[$index]->dimension_id = $dimension_id;
 		$this->gl_items[$index]->dimension2_id = $dimension2_id;
 		$this->gl_items[$index]->amount = $amount;
+		$this->gl_items[$index]->tax_net_amount = $tax_net_amount;
 		$this->gl_items[$index]->reference = $reference;
 		if ($description == null)
 			$this->gl_items[$index]->description = get_gl_account_name($code_id);
@@ -141,6 +142,25 @@ class items_cart
 		$total = 0;
 		foreach ($this->gl_items as $gl_item)
 			$total += $gl_item->amount;
+		return $total;
+	}
+
+	function gl_items_total_net()
+	{
+		$total = 0;
+		foreach ($this->gl_items as $gl_item) {
+			$total += $gl_item->tax_net_amount;
+		}
+		return $total;
+	}
+	function gl_items_total_tax()
+	{
+		$total = 0;
+		foreach ($this->gl_items as $gl_item) {
+			if(is_tax_account($gl_item->code_id)) {
+				$total += $gl_item->amount;
+			}
+		}
 		return $total;
 	}
 
@@ -254,11 +274,12 @@ class gl_item
 	var $dimension_id;
 	var $dimension2_id;
 	var $amount;
+	var $tax_net_amount;
 	var $reference;
 	var $description;
 
 	function gl_item($code_id, $dimension_id, $dimension2_id, $amount, $reference,
-		$description=null)
+		$description=null, $tax_net_amount=0)
 	{
 		//echo "adding $index, $code_id, $dimension_id, $amount, $reference<br>";
 
@@ -271,6 +292,7 @@ class gl_item
 		$this->dimension_id = $dimension_id;
 		$this->dimension2_id = $dimension2_id;
 		$this->amount = $amount;
+		$this->tax_net_amount = $tax_net_amount;
 		$this->reference = $reference;
 	}
 }

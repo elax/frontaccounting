@@ -416,7 +416,7 @@ function write_bank_transaction($trans_type, $trans_no, $from_account, $items, $
 		$ex_rate = get_exchange_rate_from_home_currency($currency, $date_);
 
 		add_gl_tax_details($gl_item->code_id, $trans_type, $trans_no, -$amount,
-			$ex_rate, $date_, $memo_);
+			$ex_rate, $date_, $memo_, false, -$gl_item->tax_net_amount);
 	}
 
 	// do the source account postings
