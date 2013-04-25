@@ -182,7 +182,7 @@ function display_gl_items($title, &$order)
 			else		
 				amount_cell($item->amount);
 			if(is_tax_account($item->code_id)) {
-				amount_cell($item->tax_net_amount);
+				amount_cell(abs($item->tax_net_amount));
 			}
 			else {
 			label_cell('');
