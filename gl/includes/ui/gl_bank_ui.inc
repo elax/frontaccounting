@@ -165,6 +165,7 @@ function display_gl_items($title, &$order)
 
 	$id = find_submit('Edit');
 	$net_amount = 0;
+	$has_tax = false;
 	foreach ($order->gl_items as $line => $item)
 	{
 		if ($id != $line)
@@ -185,6 +186,7 @@ function display_gl_items($title, &$order)
 			if(is_tax_account($item->code_id)) {
 				amount_cell(abs($item->tax_net_amount));
 				$net_amount -= $item->tax_net_amount;
+				$has_tax = true;
 			}
 			else {
 				$net_amount += $item->amount;
@@ -208,8 +210,10 @@ function display_gl_items($title, &$order)
 		gl_edit_item_controls($order, $dim, null, $net_amount);
 
 	if ($order->count_gl_items()) {
-		label_cells(_("Net"), number_format2(abs($order->gl_items_total()-$order->gl_items_total_tax()), user_price_dec()),"colspan=" . $colspan . " align=right", "align=right",3);
-		amount_cell(number_format2(abs($order->gl_items_total_net()), user_price_dec()));
+		if($has_tax) {
+				label_cells(_("Net"), number_format2(abs($order->gl_items_total()-$order->gl_items_total_tax()), user_price_dec()),"colspan=" . $colspan . " align=right", "align=right",3);
+				amount_cell(number_format2(abs($order->gl_items_total_net()), user_price_dec()));
+		}
 		label_row(_("Total"), number_format2(abs($order->gl_items_total()), user_price_dec()),"colspan=" . $colspan . " align=right", "align=right",3);
 	}
 
