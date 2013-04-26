@@ -145,6 +145,9 @@ function _set_combo_select(e) {
 			this.setAttribute('_last', this.selectedIndex);
 			if(s.className=='combo' || this.className=='combo3')
 			    _update_box(s);
+				if(s.name=='code_id') {
+					_update_code(s)
+				}
 			if(s.selectedIndex>=0) {
 				 var sname = '_'+s.name+'_update';
 				 var update = document.getElementsByName(sname)[0];
@@ -205,6 +208,26 @@ function passBack(value) {
 		}
 	}
 	close();
+}
+
+/*
+ * Hide/show net net amount input depending if the account is a tax or not
+ */
+function _update_code(s) {
+	var net_amount = document.getElementsByName('tax_net_amount')[0]
+	var rate = window.taxType[s.value]
+	if(rate == undefined) {
+		net_amount.style.display = 'none'
+	}
+	else {
+		// This is a tax account. Use the initial net amount as net
+		// and compute the real amount from it and the rate.
+		//
+		var amount = document.getElementsByName('amount')[0]
+		amount.value = net_amount.value*rate/100
+		net_amount.style.display = 'inline'
+		
+	}
 }
 
 /*

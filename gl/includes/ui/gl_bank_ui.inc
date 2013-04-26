@@ -164,6 +164,7 @@ function display_gl_items($title, &$order)
 	$k = 0;  //row colour counter
 
 	$id = find_submit('Edit');
+	$net_amount = 0;
 	foreach ($order->gl_items as $line => $item)
 	{
 		if ($id != $line)
@@ -183,9 +184,11 @@ function display_gl_items($title, &$order)
 				amount_cell($item->amount);
 			if(is_tax_account($item->code_id)) {
 				amount_cell(abs($item->tax_net_amount));
+				$net_amount -= $item->tax_net_amount;
 			}
 			else {
-			label_cell('');
+				$net_amount += $item->amount;
+				label_cell('');
 			}
 			label_cell($item->reference);
 
@@ -197,12 +200,12 @@ function display_gl_items($title, &$order)
 		}
 		else
 		{
-			gl_edit_item_controls($order, $dim, $line);
+			gl_edit_item_controls($order, $dim, $line, $net_amount);
 		}
 	}
 
 	if ($id == -1)
-		gl_edit_item_controls($order, $dim);
+		gl_edit_item_controls($order, $dim, null, $net_amount);
 
 	if ($order->count_gl_items()) {
 		label_cells(_("Net"), number_format2(abs($order->gl_items_total()-$order->gl_items_total_tax()), user_price_dec()),"colspan=" . $colspan . " align=right", "align=right",3);
@@ -212,11 +215,24 @@ function display_gl_items($title, &$order)
 
     end_table();
 	div_end();
+
+	// Hack: Add tax item info in javascript as global variable
+	echo " <script type='text/javascript'> window.taxType = {";
+        $tax_types = get_all_tax_types_simple();
+        while ($row = db_fetch($tax_types)) 
+        {
+					if($row['inactive']==1) next;
+					$account = $row['sales_gl_code'];
+					$rate = $row['rate'];
+					if(!$account) $account = $row['purchase_gl_code'];
+					echo "$account: $rate,";
+        }  
+	echo " } </script>";
 }
 
 //---------------------------------------------------------------------------------
 
-function gl_edit_item_controls(&$order, $dim, $Index=null)
+function gl_edit_item_controls(&$order, $dim, $Index=null, $net_amount)
 {
 	global $Ajax;
 	$payment = $order->trans_type == ST_BANKPAYMENT;
@@ -281,7 +297,7 @@ function gl_edit_item_controls(&$order, $dim, $Index=null)
 		hidden('dimension2_id', 0);
 
 	amount_cells(null, 'amount');
-	amount_cells(null, 'tax_net_amount');
+	echo "<td><input class='amount' name='tax_net_amount' style='display:none;' size=\"15\" type=\"text\" value=\"$net_amount\"></td>";
 	text_cells_ex(null, 'LineMemo', 35, 255);
 
 	if ($id != -1)
