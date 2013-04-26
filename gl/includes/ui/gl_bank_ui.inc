@@ -153,10 +153,10 @@ function display_gl_items($title, &$order)
 			_("Dimension")." 2", _("Amount"), _("Tax Input/Output"), _("Memo"), "");
 	else if ($dim == 1)
 		$th = array(_("Account Code"), _("Account Description"), _("Dimension"),
-			_("Amount"), _("Memo"), _("Net Amount"), "");
+			_("Amount"), _("Tax Input/Output"),  _("Memo"), "");
 	else
 		$th = array(_("Account Code"), _("Account Description"),
-			_("Amount"), _("Memo"), _("Net Amount"), "");
+			_("Amount"), _("Tax Input/Output"),  _("Memo"), "");
 
 	if (count($order->gl_items)) $th[] = '';
 
