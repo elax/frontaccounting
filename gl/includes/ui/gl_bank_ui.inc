@@ -240,6 +240,7 @@ function gl_edit_item_controls(&$order, $dim, $Index=null, $net_amount)
 {
 	global $Ajax;
 	$payment = $order->trans_type == ST_BANKPAYMENT;
+	$display = 'none';
 
 	start_row();
 	$id = find_submit('Edit');
@@ -253,6 +254,10 @@ function gl_edit_item_controls(&$order, $dim, $Index=null, $net_amount)
 		$_POST['tax_net_amount'] = price_format(abs($item->tax_net_amount));
 		$_POST['description'] = $item->description;
 		$_POST['LineMemo'] = $item->reference;
+
+		if(is_tax_account($item->code_id)) {
+			$display= 'inline';
+		}
 
 		hidden('Index', $id);
 		echo gl_all_accounts_list('code_id', null, true, true);
@@ -301,7 +306,7 @@ function gl_edit_item_controls(&$order, $dim, $Index=null, $net_amount)
 		hidden('dimension2_id', 0);
 
 	amount_cells(null, 'amount');
-	echo "<td><input class='amount' name='tax_net_amount' style='display:none;' size=\"15\" type=\"text\" value=\"$net_amount\"></td>";
+	echo "<td><input class='amount' name='tax_net_amount' style='display:$display;' size=\"15\" type=\"text\" value=\"$net_amount\"></td>";
 	text_cells_ex(null, 'LineMemo', 35, 255);
 
 	if ($id != -1)
