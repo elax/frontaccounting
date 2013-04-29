@@ -241,6 +241,7 @@ function gl_edit_item_controls(&$order, $dim, $Index=null, $net_amount)
 	global $Ajax;
 	$payment = $order->trans_type == ST_BANKPAYMENT;
 	$display = 'none';
+	$net_amount = abs($net_amount);
 
 	start_row();
 	$id = find_submit('Edit');

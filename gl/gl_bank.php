@@ -380,10 +380,11 @@ function check_item_data()
 function handle_update_item()
 {
 	$amount = ($_SESSION['pay_items']->trans_type==ST_BANKPAYMENT ? 1:-1) * input_num('amount');
+	$tax_net_amount = ($_SESSION['pay_items']->trans_type==ST_BANKPAYMENT ? 1:-1) * input_num('tax_net_amount');
     if($_POST['UpdateItem'] != "" && check_item_data())
     {
     	$_SESSION['pay_items']->update_gl_item($_POST['Index'], $_POST['code_id'], 
-    	    $_POST['dimension_id'], $_POST['dimension2_id'], $amount , $_POST['LineMemo'], null,  $_POST['tax_net_amount']);
+    	    $_POST['dimension_id'], $_POST['dimension2_id'], $amount , $_POST['LineMemo'], null,  $tax_net_amount);
     }
 	line_start_focus();
 }
@@ -403,9 +404,11 @@ function handle_new_item()
 	if (!check_item_data())
 		return;
 	$amount = ($_SESSION['pay_items']->trans_type==ST_BANKPAYMENT ? 1:-1) * input_num('amount');
+	$tax_net_amount = ($_SESSION['pay_items']->trans_type==ST_BANKPAYMENT ? 1:-1) * input_num('tax_net_amount');
+include_once($path_to_root . "/gl/includes/gl_db.inc");
 
 	$_SESSION['pay_items']->add_gl_item($_POST['code_id'], $_POST['dimension_id'],
-		$_POST['dimension2_id'], $amount, $_POST['LineMemo'], null,  $_POST['tax_net_amount']);
+		$_POST['dimension2_id'], $amount, $_POST['LineMemo'], null,  $tax_net_amount);
 	line_start_focus();
 }
 //-----------------------------------------------------------------------------------------------
