@@ -509,7 +509,7 @@ function write_journal_entries(&$cart, $reverse, $use_transaction=true)
     	}
 		// store tax details if the gl account is a tax account
 		add_gl_tax_details($journal_item->code_id, 
-			ST_JOURNAL, $trans_id, $journal_item->amount, 1, $date_, $memo_);
+			ST_JOURNAL, $trans_id, $journal_item->amount, 1, $date_, $memo_, 0, $journal_item->tax_net_amount);
 	}
 	
 	$Refs->save($trans_type, $trans_id, $ref);
@@ -545,7 +545,7 @@ function write_journal_entries(&$cart, $reverse, $use_transaction=true)
     		}
 			// store tax details if the gl account is a tax account
 			add_gl_tax_details($journal_item->code_id, 
-				ST_JOURNAL, $trans_id, $journal_item->amount, 1, $reversingDate, $memo_);
+				ST_JOURNAL, $trans_id, $journal_item->amount, 1, $reversingDate, $memo_, 0, $journal_item->net_amount);
     	}
 
     	add_comments($trans_type, $trans_id_reverse, $reversingDate, $memo_);
@@ -639,5 +639,19 @@ function get_sql_for_journal_inquiry($filter, $from, $to, $ref='', $memo='', $al
 	}
 	$sql .= " GROUP BY gl.tran_date, a.gl_seq, gl.type, gl.type_no";
 	return $sql;
+}
+
+/* This function load the transaction tax details for a given
+ * transaction and store it as hash index by the tax_type
+ */
+function get_trans_tax_details_map($type, $trans_no) {
+		$tax_trans_details = array();
+		$result = get_trans_tax_details($type, $trans_no);
+		if($result) {
+			while ($row = db_fetch($result)) {
+				$tax_trans_details[$row['tax_type_id']] =  $row;
+			}
+		}
+	return $tax_trans_details;
 }
 ?>

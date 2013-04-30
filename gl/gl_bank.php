@@ -174,16 +174,11 @@ function create_cart($type, $trans_no)
 		$cart->reference = $Refs->get($type, $trans_no);
 
 		$cart->original_amount = $bank_trans['amount'];
-		// Load tax trans details and put then in Hash table
+
+		// Load tax trans details in a Hash table
 		// to we can 'merge' manually with the gl lines.
-		
-		$tax_type_info = array();
-		$result = get_trans_tax_details($type, $trans_no);
-		if($result) {
-			while ($row = db_fetch($result)) {
-				$tax_trans_details[$row['tax_type_id']] =  $row;
-			}
-		}
+		$tax_trans_details = get_trans_tax_details_map($type, $trans_no);
+
 		$result = get_gl_trans($type, $trans_no);
 		if ($result) {
 			while ($row = db_fetch($result)) {

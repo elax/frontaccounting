@@ -224,7 +224,9 @@ function _update_code(s) {
 		// and compute the real amount from it and the rate.
 		//
 		var amount = document.getElementsByName('amount')[0]
-		amount.value = net_amount.value*rate/100
+		if(amount != undefined) {
+			amount.value = net_amount.value*rate/100
+		}
 		net_amount.style.display = 'inline'
 		
 	}

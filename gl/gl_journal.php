@@ -103,16 +103,42 @@ function create_cart($type=0, $trans_no=0)
     $cart->order_id = $trans_no;
 
 	if ($trans_no) {
+		// Load tax trans details in a Hash table
+		// to we can 'merge' manually with the gl lines.
+		$tax_trans_details = get_trans_tax_details_map($type, $trans_no);
+
 		$result = get_gl_trans($type, $trans_no);
 
 		if ($result) {
 			while ($row = db_fetch($result)) {
-				if ($row['amount'] == 0) continue;
+					$tax_type = is_tax_account($row['account']);
+					$tax_info = $tax_trans_details[$tax_type];
+					if($tax_info) {
+						$net_amount = $tax_info['net_amount'];
+						// We need to delete the tax info in case
+						// the same tax account appears more than once in the cart
+						unset($tax_trans_details[$tax_type]);
+					}
+
+				if ($row['amount'] == 0 && $net_amount == 0) continue;
 				$date = $row['tran_date'];
 				$cart->add_gl_item($row['account'], $row['dimension_id'], 
-					$row['dimension2_id'], $row['amount'], $row['memo_']);
+					$row['dimension2_id'], $row['amount'], $row['memo_'], null, $net_amount);
 			}
 		}
+
+		// Each tax infos left correspond to a tax_details with no gl entry. There are
+		// VAT transaction with amount of 0. They need to be added for the UI
+		// However, we lose some information, as the MEMO and the dimension
+		// therefore it would be easier to save the gl entry with a 0 amount.
+
+		foreach($tax_trans_details as $tax_details) {
+			$tax_type = get_tax_type($tax_details['tax_type_id']);
+			$account = $tax_type['sales_gl_code'];
+			if(!$account) $account = $tax_type['purchasing_gl_code'];
+			$cart->add_gl_item($account, 0, 0, $tax_details['amount'], '', null, $tax_details['net_amount']);
+		}
+
 		$cart->memo_ = get_comments_string($type, $trans_no);
 		$cart->tran_date = sql2date($date);
 		$cart->reference = $Refs->get($type, $trans_no);
@@ -220,7 +246,11 @@ function check_item_data()
 		return false;
 	}
 
-	if (!(input_num('AmountDebit')!=0 ^ input_num('AmountCredit')!=0) )
+	if (input_num('AmountDebit')==0 && input_num('AmountCredit')==0 && input_num('tax_net_amount')!=0) {
+		// just handling the case when both amount are null but there is a net amount.
+		// This is valid
+	}
+	else if (!(input_num('AmountDebit')!=0 ^ input_num('AmountCredit')!=0) )
 	{
 		display_error(_("You must enter either a debit amount or a credit amount."));
 		set_focus('AmountDebit');
@@ -261,13 +291,17 @@ function handle_update_item()
 {
     if($_POST['UpdateItem'] != "" && check_item_data())
     {
-    	if (input_num('AmountDebit') > 0)
-    		$amount = input_num('AmountDebit');
-    	else
-    		$amount = -input_num('AmountCredit');
+			if (input_num('AmountDebit') > 0) {
+				$amount = input_num('AmountDebit');
+				$net_amount = input_num('tax_net_amount');
+			}
+			else {
+				$amount = -input_num('AmountCredit');
+				$net_amount = -input_num('tax_net_amount');
+			}
 
     	$_SESSION['journal_items']->update_gl_item($_POST['Index'], $_POST['code_id'], 
-    	    $_POST['dimension_id'], $_POST['dimension2_id'], $amount, $_POST['LineMemo']);
+    	    $_POST['dimension_id'], $_POST['dimension2_id'], $amount, $_POST['LineMemo'], null, $net_amount);
     }
 	line_start_focus();
 }
@@ -287,13 +321,17 @@ function handle_new_item()
 	if (!check_item_data())
 		return;
 
-	if (input_num('AmountDebit') > 0)
+	if (input_num('AmountDebit') > 0) {
 		$amount = input_num('AmountDebit');
-	else
+		$net_amount = input_num('tax_net_amount');
+	}
+	else {
 		$amount = -input_num('AmountCredit');
-	
+		$net_amount = -input_num('tax_net_amount');
+	}
+
 	$_SESSION['journal_items']->add_gl_item($_POST['code_id'], $_POST['dimension_id'],
-		$_POST['dimension2_id'], $amount, $_POST['LineMemo']);
+		$_POST['dimension2_id'], $amount, $_POST['LineMemo'], null, $net_amount);
 	line_start_focus();
 }
 
