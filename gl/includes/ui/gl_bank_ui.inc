@@ -307,7 +307,8 @@ function gl_edit_item_controls(&$order, $dim, $Index=null, $net_amount)
 		hidden('dimension2_id', 0);
 
 	amount_cells(null, 'amount');
-	echo "<td><input class='amount' name='tax_net_amount' style='display:$display;' size=\"15\" type=\"text\" value=\"$net_amount\"></td>";
+	$dec = user_price_dec();
+	echo "<td><input class='amount' name='tax_net_amount' style='display:$display;' size=\"15\" type=\"text\" value=\"$net_amount\" dec=\"$dec\"></td>";
 	text_cells_ex(null, 'LineMemo', 35, 255);
 
 	if ($id != -1)
