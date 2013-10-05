@@ -275,4 +275,13 @@ $sort_sales_items = false;
 */
 $clear_trial_balance_opening = false;
 
+/*
+ * Check tax balanced option.
+ * If set to true, payment and journal entry will check
+ * that the net amount equals corresponding to TAX lines
+ * adds up with the amount of NON-TAX lines. Default is YES.
+*/
+$check_tax_is_balanced = true;
+
 ?>
+

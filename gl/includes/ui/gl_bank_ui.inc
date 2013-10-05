@@ -11,7 +11,7 @@
 ***********************************************************************/
 function display_bank_header(&$order)
 {
-	global $Ajax, $Refs;
+	global $Ajax, $Refs, $check_tax_is_balanced;
 	$payment = $order->trans_type == ST_BANKPAYMENT;
 
 	$customer_error = false;
@@ -21,9 +21,18 @@ function display_bank_header(&$order)
 
 	table_section(1);
 	
-    date_row(_("Date:"), 'date_', '', true, 0, 0, 0, null, true);
+	date_row(_("Date:"), 'date_', '', true, 0, 0, 0, null, true);
 
 	ref_row(_("Reference:"), 'ref', '');
+
+	if (!isset($_POST['CheckTaxBalance']))
+	{
+		if (isset($_GET['CheckTaxBalance']))
+			$_POST['CheckTaxBalance'] = $_GET['CheckTaxBalance'];
+		else
+			$_POST['CheckTaxBalance'] = $check_tax_is_balanced !== false;
+	}
+	check_row(_("Check Tax Balance:"), "CheckTaxBalance",  $_POST['CheckTaxBalance']);
 
 	table_section(2, "33%");
 

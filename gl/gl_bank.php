@@ -315,6 +315,13 @@ function check_trans()
 		set_focus('person_id');
 		$input_error = 1;
 	}
+
+	// Check all amount have been allocated to tax. Can be forced or disabled by config file.
+	if($_POST['CheckTaxBalance'] != false && !$_SESSION['pay_items']->check_tax_is_balanced()) {
+		display_error(_("Net Amount doesn't mach tax input/output. Please correct it or uncheck the check tax button.")); 
+		$input_error = 1;
+	}
+
 	return $input_error;
 }
 

@@ -164,6 +164,16 @@ class items_cart
 		return $total;
 	}
 
+	function check_tax_is_balanced() {
+		/*
+		 * Checks if the total net amount match the total of non-tax line amount.
+		 */
+		$non_tax = $this->gl_items_total() - $this->gl_items_total_tax();
+		return $non_tax == $this->gl_items_total_net();
+
+	}
+
+
 	function gl_items_total_debit()
 	{
 		$total = 0;
