@@ -62,6 +62,8 @@ function write_sales_delivery(&$delivery,$bo_policy)
 
 	foreach ($delivery->line_items as $line_no => $delivery_line) {
 
+		$XXX_id = $delivery_line->stock_id;
+
 		$line_price = $delivery_line->line_price();
 		$line_taxfree_price = get_tax_free_price_for_item($delivery_line->stock_id,
 			$delivery_line->price, 0, $delivery->tax_included,
@@ -109,7 +111,7 @@ function write_sales_delivery(&$delivery,$bo_policy)
 					$delivery->document_date, $stock_gl_code["cogs_account"], $dim, $dim2, "",
 					$delivery_line->standard_cost * $delivery_line->qty_dispatched,
 					PT_CUSTOMER, $delivery->customer_id,
-					"The cost of sales GL posting could not be inserted");
+					"The cost of sales GL posting could not be inserted", $XXX_id);
 
 				/*now the stock entry*/
 

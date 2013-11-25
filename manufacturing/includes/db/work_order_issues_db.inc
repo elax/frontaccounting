@@ -57,6 +57,7 @@ function add_work_order_issue($woid, $ref, $to_work_order, $items, $location, $w
 
 		//Chaitanya: Stamp the standard_cost
 		$standard_cost = get_standard_cost($item->stock_id);
+		$XXX_id = $item->stock_id;
 		// insert a -ve stock move for each item
 		add_stock_move(ST_MANUISSUE, $item->stock_id, $number,
 			$location, $date_, $memo_, -$item->quantity, $standard_cost);
@@ -78,7 +79,7 @@ function add_work_order_issue($woid, $ref, $to_work_order, $items, $location, $w
 			$ivaccount = $issue["cogs_account"];		
 		
         $total_cost += add_gl_trans_std_cost(ST_WORKORDER, $woid, $date_, $ivaccount, 0, 0,
-                $date_.": "._("Issue of")." ".$stockitem["description"], -$issue_cost);			
+                $date_.": "._("Issue of")." ".$stockitem["description"], -$issue_cost, null, null, "", $XXX_id);			
 		$issue_total += $issue_cost;
 	}	
 	if ($issue_total != 0)
@@ -87,7 +88,7 @@ function add_work_order_issue($woid, $ref, $to_work_order, $items, $location, $w
 	$issue = get_stock_gl_code($details['stock_id']);
     $stockitem = get_item($details['stock_id']);
     add_gl_trans_std_cost(ST_WORKORDER, $woid, $date_, $issue["inventory_account"],
-        0, 0, $date_.": "._("Issue to")." ".$stockitem["description"], -$total_cost);	
+        0, 0, $date_.": "._("Issue to")." ".$stockitem["description"], -$total_cost, null, null, "", $XXX_id);	
 
 	if ($memo_)
 		add_comments(ST_MANUISSUE, $number, $date_, $memo_);
@@ -195,6 +196,7 @@ function void_work_order_issue($type_no)
 		$issue_cost = $myrow["qty"]*$myrow["standard_cost"];
 		$issue = get_stock_gl_code($myrow["stock_id"]);
         $stockitem = get_item($myrow["stock_id"]);
+		$XXX_id = $myrow['stock_id'];
 		
 		//Chaitanya : Compatibility for Service Items
 		if (!is_service($issue["mb_flag"]))
@@ -206,7 +208,7 @@ function void_work_order_issue($type_no)
 		{
 			$total_cost += add_gl_trans_std_cost(ST_WORKORDER, $woid, $date_, $ivaccount, 0, 0,
 				$date_.": "._("Reversed the issue of")." ".$stockitem["description"],
-				-$issue_cost);			
+				-$issue_cost, null, null, "", $XXX_id);			
 			$issue_total += $issue_cost;
 		}
 	}
@@ -218,7 +220,7 @@ function void_work_order_issue($type_no)
 	if ($total_cost != 0)
 		add_gl_trans_std_cost(ST_WORKORDER, $woid, $date_, $issue["inventory_account"],
 			0, 0, $date_.": "._("Reversed the issue to")." ".$stockitem["description"], 
-			-$total_cost);	
+			-$total_cost, null, null, "", $XXX_id);	
 	
 	//Chaitanya : Shifted below void all related stock moves
 	void_stock_move(ST_MANUISSUE, $type_no);

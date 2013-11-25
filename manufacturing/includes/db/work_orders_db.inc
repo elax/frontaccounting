@@ -55,6 +55,8 @@ function add_material_cost($stock_id, $qty, $date_, $advanced=false)
 
 function add_overhead_cost($stock_id, $qty, $date_, $costs, $adj_only=false)
 {
+
+	$XXX_id = $stock_id;
 	if ($qty != 0)
 		$costs /= $qty;
 	$sql = "SELECT overhead_cost FROM ".TB_PREF."stock_master WHERE stock_id = "
@@ -84,12 +86,12 @@ function add_overhead_cost($stock_id, $qty, $date_, $costs, $adj_only=false)
 			add_gl_trans_std_cost(ST_JOURNAL, $id, $date_, 
 				$stock_gl_code["inventory_account"],
 				$stock_gl_code['dimension_id'], $stock_gl_code['dimension2_id'], $memo, 
-				-$costs);
+				-$costs, null, null, "", $XXX_id);
 			//GL Posting to inventory adjustment account
 			add_gl_trans_std_cost(ST_JOURNAL, $id, $date_, 
 				$stock_gl_code["adjustment_account"],
 				$stock_gl_code['dimension_id'], $stock_gl_code['dimension2_id'], $memo,
-				$costs);
+				$costs, null, null, "", $XXX_id);
 				
 			add_audit_trail(ST_JOURNAL, $id, $date_);
 			add_comments(ST_JOURNAL, $id, $date_, $memo);
@@ -108,6 +110,7 @@ function add_overhead_cost($stock_id, $qty, $date_, $costs, $adj_only=false)
 
 function add_labour_cost($stock_id, $qty, $date_, $costs, $adj_only=false)
 {
+	$XXX_id = $stock_id;
 	if ($qty != 0)
 		$costs /= $qty;
 	$sql = "SELECT labour_cost FROM ".TB_PREF."stock_master WHERE stock_id = "
@@ -137,12 +140,12 @@ function add_labour_cost($stock_id, $qty, $date_, $costs, $adj_only=false)
 			add_gl_trans_std_cost(ST_JOURNAL, $id, $date_, 
 				$stock_gl_code["inventory_account"],
 				$stock_gl_code['dimension_id'], $stock_gl_code['dimension2_id'], $memo, 
-				-$costs);
+				-$costs, null, null, "", $XXX_id);
 			//GL Posting to inventory adjustment account
 			add_gl_trans_std_cost(ST_JOURNAL, $id, $date_, 
 				$stock_gl_code["adjustment_account"],
 				$stock_gl_code['dimension_id'], $stock_gl_code['dimension2_id'], $memo,
-				$costs);
+				$costs, null, null, "", $XXX_id);
 				
 			add_audit_trail(ST_JOURNAL, $id, $date_);
 			add_comments(ST_JOURNAL, $id, $date_, $memo);
@@ -161,6 +164,7 @@ function add_labour_cost($stock_id, $qty, $date_, $costs, $adj_only=false)
 
 function add_issue_cost($stock_id, $qty, $date_, $costs, $adj_only=false)
 {
+	$XXX_id = $stock_id;
 	if ($qty != 0)
 		$costs /= $qty;
 	$sql = "SELECT material_cost FROM ".TB_PREF."stock_master WHERE stock_id = "
@@ -190,12 +194,12 @@ function add_issue_cost($stock_id, $qty, $date_, $costs, $adj_only=false)
 			add_gl_trans_std_cost(ST_JOURNAL, $id, $date_, 
 				$stock_gl_code["inventory_account"],
 				$stock_gl_code['dimension_id'], $stock_gl_code['dimension2_id'], $memo, 
-				-$costs);
+				-$costs, null, null, "", $XXX_id);
 			//GL Posting to inventory adjustment account
 			add_gl_trans_std_cost(ST_JOURNAL, $id, $date_, 
 				$stock_gl_code["adjustment_account"],
 				$stock_gl_code['dimension_id'], $stock_gl_code['dimension2_id'], $memo,
-				$costs);
+				$costs, null, null, "", $XXX_id);
 				
 			add_audit_trail(ST_JOURNAL, $id, $date_);
 			add_comments(ST_JOURNAL, $id, $date_, $memo);

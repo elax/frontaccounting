@@ -101,6 +101,7 @@ function write_sales_invoice(&$invoice)
 
 		if ($invoice_line->qty_dispatched != 0) {
 			$stock_gl_code = get_stock_gl_code($invoice_line->stock_id);
+			$XXX_id = $invoice_line->stock_id;
 
 			if ($invoice_line->line_price() != 0) {
 				//Post sales transaction to GL credit sales
@@ -123,7 +124,7 @@ function write_sales_invoice(&$invoice)
 					$total += add_gl_trans_customer(ST_SALESINVOICE, $invoice_no, $date_,
 						$branch_data["sales_discount_account"], $dim, $dim2,
 						($line_taxfree_price * $invoice_line->discount_percent),
-						$invoice->customer_id, "The sales discount GL posting could not be inserted");
+						$invoice->customer_id, "The sales discount GL posting could not be inserted", $XXX_id);
 				} /*end of if discount !=0 */
 			}
 		} /*quantity dispatched is more than 0 */

@@ -156,7 +156,7 @@ function void_work_order_produce($type_no)
 		{
 			add_gl_trans_std_cost(ST_WORKORDER, $woid, $date_, $ivaccount, 0, 0,
 				$date_.": "._("Reversed the production ")." ".$stockitem["description"],
-				-$issue_cost);
+				-$issue_cost, null, null, $XXX_id );
 		}
 	}	
 			

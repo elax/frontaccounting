@@ -15,6 +15,7 @@ function stock_cost_update($stock_id, $material_cost, $labour_cost, $overhead_co
 	$last_cost)
 {
 	$mb_flag = get_mb_flag($stock_id);
+	$XXX_id = $stock_id;
     
 	$update_no = -1;
 
@@ -60,12 +61,14 @@ function stock_cost_update($stock_id, $material_cost, $labour_cost, $overhead_co
 			$memo_ = sprintf(_("Cost was %s changed to %s x quantity on hand for item '%s'"),
 				number_format2($last_cost, 2), number_format2($new_cost, 2), $stock_id);
 			add_gl_trans_std_cost(ST_COSTUPDATE, $update_no, $date_, $stock_gl_code["adjustment_account"], 
-				$stock_gl_code["dimension_id"], $stock_gl_code["dimension2_id"], $memo_, (-$value_of_change));	   
+				$stock_gl_code["dimension_id"], $stock_gl_code["dimension2_id"], $memo_, (-$value_of_change),
+				null, null, "", $XXX_id);	   
 
 			add_gl_trans_std_cost(ST_COSTUPDATE, $update_no, $date_, $stock_gl_code["inventory_account"], 0, 0, $memo_, 
-				$value_of_change);
+				$value_of_change,
+				null, null, "", $XXX_id);
 		}		
-   	}
+		}
 
 	if ($update_no != -1)
 		add_audit_trail(ST_COSTUPDATE, $update_no, $date_);

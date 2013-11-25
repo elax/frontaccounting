@@ -32,14 +32,14 @@ include_once($path_to_root . "/purchasing/includes/db/suppliers_db.inc");
 // $amount is in SUPPLIERS'S currency
 
 function add_gl_trans_supplier($type, $type_no, $date_, $account, $dimension, $dimension2,  
-	$amount, $supplier_id, $err_msg="", $rate=0, $memo="")
+	$amount, $supplier_id, $err_msg="", $rate=0, $memo="", $XXX_id=null)
 {
 	if ($err_msg == "")
 		$err_msg = "The supplier GL transaction could not be inserted";	
 		
 	return add_gl_trans($type, $type_no, $date_, $account, $dimension, $dimension2, $memo, 
 		$amount, get_supplier_currency($supplier_id), 
-		PT_SUPPLIER, $supplier_id, $err_msg, $rate);
+		PT_SUPPLIER, $supplier_id, $err_msg, $rate, $XXX_id);
 }
 
 //----------------------------------------------------------------------------------------

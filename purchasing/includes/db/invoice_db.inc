@@ -225,6 +225,7 @@ function add_supp_invoice($supp_trans, $invoice_no=0) // do not receive as ref b
     $clearing_act = get_company_pref('grn_clearing_act');
     foreach ($supp_trans->grn_items as $line_no => $entered_grn)
     {
+			$XXX_id = $entered_grn->item_code;
 
     	if ($trans_type == ST_SUPPCREDIT)
     	{
@@ -254,7 +255,7 @@ function add_supp_invoice($supp_trans, $invoice_no=0) // do not receive as ref b
 			$iv_act = (is_inventory_item($entered_grn->item_code) ? $stock_gl_code["inventory_account"] : 
 				($supplier["purchase_account"] ? $supplier["purchase_account"] : $stock_gl_code["cogs_account"]));
 			$total += add_gl_trans_supplier($trans_type, $invoice_id, $date_, $iv_act,
-				$dim, $dim2, $taxfree_line, $supp_trans->supplier_id);
+				$dim, $dim2, $taxfree_line, $supp_trans->supplier_id, "", 0, "", $XXX_id);
 		}
     	else
     	{
@@ -273,7 +274,7 @@ function add_supp_invoice($supp_trans, $invoice_no=0) // do not receive as ref b
 			$old_date = sql2date($old[1]);
 			if (!is_inventory_item($entered_grn->item_code))
 				$total += add_gl_trans_supplier($trans_type, $invoice_id, $date_, $iv_act,
-					$dim, $dim2, $taxfree_line, $supp_trans->supplier_id);
+					$dim, $dim2, $taxfree_line, $supp_trans->supplier_id, "", 0, "", $XXX_id);
 			else
 			{
 				$ex_rate = get_exchange_rate_from_home_currency($supplier['curr_code'], $old_date);
@@ -283,7 +284,7 @@ function add_supp_invoice($supp_trans, $invoice_no=0) // do not receive as ref b
 				$currency = get_supplier_currency($supp_trans->supplier_id);
 
 				$total += add_gl_trans_supplier($trans_type, $invoice_id, $date_, $iv_act,
-					$dim, $dim2, $old_value, $supp_trans->supplier_id, "", $ex_rate);
+					$dim, $dim2, $old_value, $supp_trans->supplier_id, "", $ex_rate, "", $XXX_id);
 				$diff = get_diff_in_home_currency($supp_trans->supplier_id, $old_date, $date_, $old_value, 
 					$taxfree_line);
 
@@ -295,7 +296,7 @@ function add_supp_invoice($supp_trans, $invoice_no=0) // do not receive as ref b
 				{
 					$total += add_gl_trans($trans_type, $invoice_id, $date_, $stock_gl_code["inventory_account"],
 						$dim, $dim2, 'GRN Provision', $diff, null, null, null,
-						"The general ledger transaction could not be added for the GRN of the inventory item");
+						"The general ledger transaction could not be added for the GRN of the inventory item", 0, $XXX_id);
 
 					//If QOH is 0 or negative then update_average_material_cost will be skipped
 					//Thus difference in PO and Supp Invoice should be handled separately
@@ -312,11 +313,11 @@ function add_supp_invoice($supp_trans, $invoice_no=0) // do not receive as ref b
 						//Reverse the inventory effect if $qoh <=0
 						add_gl_trans_std_cost(ST_JOURNAL, $id, $date_, 
 							$stock_gl_code["inventory_account"],
-							$dim, $dim2, $memo, -$diff);
+							$dim, $dim2, $memo, -$diff, PT_SUPPLIER, $supp_trans->supplier_id, "", $XXX_id);
 						//GL Posting to inventory adjustment account
 						add_gl_trans_std_cost(ST_JOURNAL, $id, $date_, 
 							$stock_gl_code["adjustment_account"],
-							$dim, $dim2, $memo, $diff);
+							$dim, $dim2, $memo, $diff, PT_SUPPLIER, $supp_trans->supplier_id, "", $XXX_id);
 
 						add_audit_trail(ST_JOURNAL, $id, $date_);
 						add_comments(ST_JOURNAL, $id, $date_, $memo);
@@ -563,16 +564,17 @@ function void_supp_invoice($type, $type_no)
 						$id = get_next_trans_no(ST_JOURNAL);
 						$ref = $Refs->get_next(ST_JOURNAL);
 						$stock_id = $details_row["stock_id"];
+						$XXX_id = $stock_id;
 						$stock_gl_code = get_stock_gl_code($stock_id);
 						$memo = "Reversing Supplier invoice adjustment for zero inventory of ".$stock_id." Invoice: ".$trans['reference'];
 						//Reverse the inventory effect if $qoh <=0
 						add_gl_trans_std_cost(ST_JOURNAL, $id, $old_date, 
 							$stock_gl_code["inventory_account"],
-							$dim, $dim2, $memo, $details_row["quantity"] * $diff);
+							$dim, $dim2, $memo, $details_row["quantity"] * $diff, PT_SUPPLIER, $grn['supplier_id'], "", $XXX_id);
 						//GL Posting to inventory adjustment account
 						add_gl_trans_std_cost(ST_JOURNAL, $id, $old_date, 
 							$stock_gl_code["adjustment_account"],
-							$dim, $dim2, $memo, -$details_row["quantity"] * $diff);
+							$dim, $dim2, $memo, -$details_row["quantity"] * $diff, PT_SUPPLIER, $grn['supplier_id'], "", $XXX_id);
 						
 						add_audit_trail(ST_JOURNAL, $id, $old_date);
 						add_comments(ST_JOURNAL, $id, $old_date, $memo);
@@ -649,6 +651,7 @@ function remove_not_invoice_item($id)
         
     $clearing_act = get_company_pref('grn_clearing_act');
     if ($clearing_act) {    // otherwise GRN clearing account is not used
+				$XXX_id = $myrow['item_code'];
         if (is_inventory_item($myrow['item_code']))
         {
             $total = 0;
@@ -656,9 +659,9 @@ function remove_not_invoice_item($id)
             $date = sql2date($grn["delivery_date"]);
             $total += add_gl_trans_supplier(ST_SUPPRECEIVE, $myrow['grn_batch_id'], $date, $stock_gl_code["inventory_account"],
                 $stock_gl_code['dimension_id'], $stock_gl_code['dimension2_id'],
-                -$myrow['QtyOstdg'] * $price, $grn["supplier_id"], "", 0, _("GRN Removal"));
+                -$myrow['QtyOstdg'] * $price, $grn["supplier_id"], "", 0, _("GRN Removal"), $XXX_id);
             $total += add_gl_trans_supplier(ST_SUPPRECEIVE, $myrow['grn_batch_id'], $date, $clearing_act,
-                0, 0, -$total, null, "", 0, _("GRN Removal"));
+                0, 0, -$total, null, "", 0, _("GRN Removal"), $XXX_id);
         }    
     }
 

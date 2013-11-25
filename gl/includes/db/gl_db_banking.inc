@@ -10,7 +10,7 @@
     See the License here <http://www.gnu.org/licenses/gpl-3.0.html>.
 ***********************************************************************/
 function add_exchange_variation($trans_no, $date_, $acc_id, $account,
-    $currency, $person_type_id=null, $person_id = "")
+    $currency, $person_type_id=null, $person_id = "", $XXX_id=null)
 {
 	if (is_company_currency($currency))
 		return false;
@@ -42,25 +42,25 @@ function add_exchange_variation($trans_no, $date_, $acc_id, $account,
 		if ($person_type_id == null)
 			$person_type_id = PT_MISC;
 		add_gl_trans(ST_JOURNAL, $trans_no, $date_, $account, 0, 0, _("Exchange Variance"),
-    		-$diff, null, $person_type_id, $person_id);
+    		-$diff, null, $person_type_id, $person_id, "", 0, $XXX_id);
     	add_gl_trans(ST_JOURNAL, $trans_no, $date_, get_company_pref('exchange_diff_act'), 0, 0, 
-    		_("Exchange Variance"),	$diff, null, $person_type_id, $person_id);
+    		_("Exchange Variance"),	$diff, null, $person_type_id, $person_id, "", 0, $XXX_id);
 		return true;
 	}
 	return false;
 }
 
 //------------- New helper functions for revaluation of customer/supplier currencies 2011-05-08 Joe Hunt.
-function add_cust_supp_revaluation($ledger_act, $ex_act, $date, $amount, $person_type_id, $person_id, $memo)
+function add_cust_supp_revaluation($ledger_act, $ex_act, $date, $amount, $person_type_id, $person_id, $memo, $XXX_id=null)
 {
 	global $Refs;
 	if ($amount == 0)
 		return;
 	$trans_no = get_next_trans_no(ST_JOURNAL);
 	add_gl_trans(ST_JOURNAL, $trans_no, $date, $ledger_act, 0, 0, _("Exchange Variance"),
-		$amount, null, $person_type_id, $person_id);
+		$amount, null, $person_type_id, $person_id, "", 0, $XXX_id);
 	add_gl_trans(ST_JOURNAL, $trans_no, $date, $ex_act, 0, 0, 
-		_("Exchange Variance"),	-$amount, null, $person_type_id, $person_id);
+		_("Exchange Variance"),	-$amount, null, $person_type_id, $person_id, "", 0, $XXX_id);
 	add_comments(ST_JOURNAL, $trans_no, $date, $memo);
 	$ref = $Refs->get_next(ST_JOURNAL);
 	$Refs->save(ST_JOURNAL, $trans_no, $ref);

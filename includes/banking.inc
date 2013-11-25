@@ -155,7 +155,7 @@ function exchange_from_to($amount, $from_curr_code, $to_curr_code, $date_)
 //--------------------------------------------------------------------------------
 // Exchange Variations Joe Hunt 2008-09-20 ////////////////////////////////////////
 
-function exchange_variation($pyt_type, $pyt_no, $type, $trans_no, $pyt_date, $amount, $person_type, $neg=false)
+function exchange_variation($pyt_type, $pyt_no, $type, $trans_no, $pyt_date, $amount, $person_type, $neg=false, $XXX_id)
 {
 	global $systypes_array;
 	
@@ -194,14 +194,14 @@ function exchange_variation($pyt_type, $pyt_no, $type, $trans_no, $pyt_date, $am
 		if (date1_greater_date2($date, $pyt_date))
 		{
 			$memo = $systypes_array[$pyt_type]." ".$pyt_no;
-			add_gl_trans($type, $trans_no, $date, $ar_ap_act, 0, 0, $memo, -$diff, null, $person_type, $person_id);
-			add_gl_trans($type, $trans_no, $date, $exc_var_act, 0, 0, $memo, $diff, null, $person_type, $person_id);
+			add_gl_trans($type, $trans_no, $date, $ar_ap_act, 0, 0, $memo, -$diff, null, $person_type, $person_id, "", 0, $XXX_id);
+			add_gl_trans($type, $trans_no, $date, $exc_var_act, 0, 0, $memo, $diff, null, $person_type, $person_id), "", 0, $XXX_id);
 		}
 		else
 		{
 			$memo = $systypes_array[$type]." ".$trans_no;
-			add_gl_trans($pyt_type, $pyt_no, $pyt_date, $ar_ap_act, 0, 0, $memo, -$diff, null, $person_type, $person_id);
-			add_gl_trans($pyt_type, $pyt_no, $pyt_date, $exc_var_act, 0, 0, $memo, $diff, null, $person_type, $person_id);
+			add_gl_trans($pyt_type, $pyt_no, $pyt_date, $ar_ap_act, 0, 0, $memo, -$diff, null, $person_type, $person_id, "", 0, $XXX_id);
+			add_gl_trans($pyt_type, $pyt_no, $pyt_date, $exc_var_act, 0, 0, $memo, $diff, null, $person_type, $person_id, "", 0, $XXX_id);
 		}
 	}
 }

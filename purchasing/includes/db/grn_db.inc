@@ -79,7 +79,7 @@ function update_average_material_cost($supplier, $stock_id, $price, $qty, $date,
 	}
 
 	if ($cost_adjust) // new 2010-02-10 //Chaitanya : Material_cost replaced with price
-		adjust_deliveries($stock_id, $price_in_home_currency_, $date);
+		adjust_deliveries($stock_id, $price_in_home_currency_, $date, $XXX_id);
 	$sql = "UPDATE ".TB_PREF."stock_master SET material_cost=".db_escape($material_cost)."
 		WHERE stock_id=".db_escape($stock_id);
 
@@ -108,6 +108,7 @@ function add_grn(&$po)
 	}
 	foreach ($po->line_items as $line_no => $order_line)
 	{
+		$XXX_id = $order_line->stock_id;
 		if ($order_line->receive_qty != 0 && $order_line->receive_qty != "" && isset($order_line->receive_qty))
 		{
 			$stock_gl_code = get_stock_gl_code($order_line->stock_id);
@@ -119,7 +120,7 @@ function add_grn(&$po)
 				if ($clearing_act)
 					$total += add_gl_trans_supplier(ST_SUPPRECEIVE, $grn, $date_, $stock_gl_code["inventory_account"],
 						$stock_gl_code['dimension_id'], $stock_gl_code['dimension2_id'],
-						$order_line->receive_qty * $order_line->taxfree_charge_price($po), $po->supplier_id, '', 0, $order_line->stock_id);
+						$order_line->receive_qty * $order_line->taxfree_charge_price($po), $po->supplier_id, '', 0, $XXX_id);
 				update_average_material_cost($po->supplier_id, $order_line->stock_id, $order_line->price,
 					$order_line->receive_qty, $date_);
 			}		

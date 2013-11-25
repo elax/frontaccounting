@@ -117,6 +117,7 @@ function work_order_quick_costs($woid, $stock_id, $units_reqd, $date_, $advanced
 {
 	global $wo_cost_types;
 	$result = get_bom($stock_id);
+	$XXX_id = $stock_id;
 
 	// credit all the components
 	$total_cost = 0;
@@ -146,7 +147,7 @@ function work_order_quick_costs($woid, $stock_id, $units_reqd, $date_, $advanced
 		else
 			$ivaccount = $bom_accounts["cogs_account"];
 		$total_cost += add_gl_trans_std_cost(ST_WORKORDER, $woid, $date_, $ivaccount, 0, 0,
-			$memo, -$bom_cost);
+			$memo, -$bom_cost, null, null, "", $XXX_id);
 		$total_material_cost += $bom_cost;
 	}
 	if ($advanced)
@@ -167,7 +168,7 @@ function work_order_quick_costs($woid, $stock_id, $units_reqd, $date_, $advanced
 			$issue = get_stock_gl_code($item['stock_id']);
             $stockitem = get_item($item['stock_id']);
             $total_cost += add_gl_trans_std_cost(ST_WORKORDER, $woid, $date_, $issue["inventory_account"], 0, 0,
-                $date_.": "._("Issue of")." ".$stockitem["description"], -$issue_cost);			
+                $date_.": "._("Issue of")." ".$stockitem["description"], -$issue_cost, null, null, "", $XXX_id);			
 			$issue_total += $issue_cost;
 		}
 		if ($issue_total != 0)
@@ -186,7 +187,7 @@ function work_order_quick_costs($woid, $stock_id, $units_reqd, $date_, $advanced
 	if ($costs != 0.0)
 	{
 		add_gl_trans_std_cost(ST_WORKORDER, $woid, $date_, $cr_acc,
-			0, 0, $wo_cost_types[WO_OVERHEAD], -$costs, PT_WORKORDER, WO_OVERHEAD);
+			0, 0, $wo_cost_types[WO_OVERHEAD], -$costs, PT_WORKORDER, WO_OVERHEAD, "", $XXX_id);
 		$is_bank_to = is_bank_account($cr_acc);
     	if ($is_bank_to)
     	{
@@ -197,12 +198,12 @@ function work_order_quick_costs($woid, $stock_id, $units_reqd, $date_, $advanced
 			
 		add_gl_trans_std_cost(ST_WORKORDER, $woid, $date_, $item_accounts["assembly_account"],
 			$item_accounts["dimension_id"], $item_accounts["dimension2_id"], $wo_cost_types[WO_OVERHEAD], $costs, 
-			PT_WORKORDER, WO_OVERHEAD);
+			PT_WORKORDER, WO_OVERHEAD, "", $XXX_id);
 	}
 	if ($labour != 0.0)
 	{
 		add_gl_trans_std_cost(ST_WORKORDER, $woid, $date_, $cr_lab_acc,
-			0, 0, $wo_cost_types[WO_LABOUR], -$labour, PT_WORKORDER, WO_LABOUR);
+			0, 0, $wo_cost_types[WO_LABOUR], -$labour, PT_WORKORDER, WO_LABOUR, "", $XXX_id);
 		$is_bank_to = is_bank_account($cr_lab_acc);
     	if ($is_bank_to)
     	{
@@ -213,7 +214,7 @@ function work_order_quick_costs($woid, $stock_id, $units_reqd, $date_, $advanced
 			
 		add_gl_trans_std_cost(ST_WORKORDER, $woid, $date_, $item_accounts["assembly_account"],
 			$item_accounts["dimension_id"], $item_accounts["dimension2_id"], $wo_cost_types[WO_LABOUR], $labour, 
-			PT_WORKORDER, WO_LABOUR);
+			PT_WORKORDER, WO_LABOUR, "", $XXX_id);
 	}
 	// debit total components $total_cost
  	$stockitem = get_item($stock_id);
@@ -221,7 +222,7 @@ function work_order_quick_costs($woid, $stock_id, $units_reqd, $date_, $advanced
  	if ($advanced)
  		$memo = $date_.": ".$memo;
     add_gl_trans_std_cost(ST_WORKORDER, $woid, $date_, $item_accounts["inventory_account"],
-        0, 0, $memo, -$total_cost);	
+        0, 0, $memo, -$total_cost, null, null, "", $XXX_id);	
 		
 	//Chaitanya : Update cost of the manufactured item in stock moves table
 	$UnitWOCost = ($total_material_cost + $costs + $labour)/$units_reqd;

@@ -75,6 +75,7 @@ function add_stock_adjustment_item($adj_id, $stock_id, $location, $date_, $type,
 	$quantity, $standard_cost, $memo_)
 {
 	$mb_flag = get_mb_flag($stock_id);
+	$XXX_id = $stock_id;
 
     if (is_service($mb_flag))
     {
@@ -101,12 +102,7 @@ function add_stock_adjustment_item($adj_id, $stock_id, $location, $date_, $type,
 			add_gl_trans_std_cost(ST_JOURNAL, $id, $date_, 
 				$stock_gl_code["inventory_account"],
 				$stock_gl_code['dimension_id'], $stock_gl_code['dimension2_id'], $memo, 
-				-$qoh * $diff);
-			//GL Posting to inventory adjustment account
-			add_gl_trans_std_cost(ST_JOURNAL, $id, $date_, 
-				$stock_gl_code["adjustment_account"],
-				$stock_gl_code['dimension_id'], $stock_gl_code['dimension2_id'], $memo,
-				$qoh * $diff);
+				$qoh * $diff, null, null, "", $XXX_id);
 				
 			add_audit_trail(ST_JOURNAL, $id, $date_);
 			add_comments(ST_JOURNAL, $id, $date_, $memo);
@@ -125,9 +121,20 @@ function add_stock_adjustment_item($adj_id, $stock_id, $location, $date_, $type,
 		$stock_gl_codes = get_stock_gl_code($stock_id);
 
 		add_gl_trans_std_cost(ST_INVADJUST, $adj_id, $date_,
-			$stock_gl_codes['adjustment_account'], $stock_gl_codes['dimension_id'], $stock_gl_codes['dimension2_id'], $memo_, ($standard_cost * -($quantity)));
+				$stock_gl_codes['adjustment_account'],
+				$stock_gl_codes['dimension_id'],
+				$stock_gl_codes['dimension2_id'],
+				$memo_,
+				($standard_cost * -($quantity)), null, null, "", $XXX_id);
 
-		add_gl_trans_std_cost(ST_INVADJUST, $adj_id, $date_, $stock_gl_codes['inventory_account'], 0, 0, $memo_, ($standard_cost * $quantity));
+		add_gl_trans_std_cost(ST_INVADJUST,
+				$adj_id,
+				$date_,
+				$stock_gl_codes['inventory_account'],
+				0,
+				0,
+				$memo_,
+				($standard_cost * $quantity), null, null, "", $XXX_id);
 	}
 }
 
