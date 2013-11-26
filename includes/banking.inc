@@ -195,7 +195,7 @@ function exchange_variation($pyt_type, $pyt_no, $type, $trans_no, $pyt_date, $am
 		{
 			$memo = $systypes_array[$pyt_type]." ".$pyt_no;
 			add_gl_trans($type, $trans_no, $date, $ar_ap_act, 0, 0, $memo, -$diff, null, $person_type, $person_id, "", 0, $XXX_id);
-			add_gl_trans($type, $trans_no, $date, $exc_var_act, 0, 0, $memo, $diff, null, $person_type, $person_id), "", 0, $XXX_id);
+			add_gl_trans($type, $trans_no, $date, $exc_var_act, 0, 0, $memo, $diff, null, $person_type, $person_id, "", 0, $XXX_id);
 		}
 		else
 		{
