@@ -141,6 +141,7 @@ function show_results()
 	    $remaining_cols = array(_("Person/Item"), _("Debit"), _("Credit"), _("Balance"), _("Memo"));
 	else
 	    $remaining_cols = array(_("Person/Item"), _("Debit"), _("Credit"), _("Memo"));
+	$remaining_cols[]=_("Item");
 	    
 	$th = array_merge($first_cols, $account_col, $dim_cols, $remaining_cols);
 			
@@ -195,6 +196,7 @@ function show_results()
 		if ($show_balances)
 		    amount_cell($running_total);
     	label_cell($myrow['memo_']);
+    	label_cell($myrow['stock_id']); // $XXX_id
     	end_row();
 
     	$j++;

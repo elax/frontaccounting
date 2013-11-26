@@ -216,6 +216,76 @@
 	<td>//html/body/table/tbody/tr/td/table/tbody/tr/td/div[2]/center[2]/table/tbody/tr[2]/td[7]</td>
 	<td>A-Black</td>
 </tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Close</td>
+	<td></td>
+</tr>
+<tr>
+	<td>selectWindow</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Banking and General Ledger</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//tr[2]/td/table/tbody/tr[2]/td/a[2]/u</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=Show</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>/html/body/table/tbody/tr/td/table/tbody/tr/td/div[2]/div/center/table/tbody/tr/td[10]</td>
+	<td>Item</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>/html/body/table/tbody/tr/td/table/tbody/tr/td/div[2]/div/center/table/tbody/tr[2]/td[10]</td>
+	<td>A-Black</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>/html/body/table/tbody/tr/td/table/tbody/tr/td/div[2]/div/center/table/tbody/tr[3]/td[10]</td>
+	<td>B-Black</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>/html/body/table/tbody/tr/td/table/tbody/tr/td/div[2]/div/center/table/tbody/tr[7]/td[10]</td>
+	<td>A-Black</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>/html/body/table/tbody/tr/td/table/tbody/tr/td/div[2]/div/center/table/tbody/tr[8]/td[10]</td>
+	<td>B-Black</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>/html/body/table/tbody/tr/td/table/tbody/tr/td/div[2]/div/center/table/tbody/tr[9]/td[10]</td>
+	<td>A-Black</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>/html/body/table/tbody/tr/td/table/tbody/tr/td/div[2]/div/center/table/tbody/tr[10]/td[10]</td>
+	<td>A-Black</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>/html/body/table/tbody/tr/td/table/tbody/tr/td/div[2]/div/center/table/tbody/tr[11]/td[10]</td>
+	<td>A-Black</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>/html/body/table/tbody/tr/td/table/tbody/tr/td/div[2]/div/center/table/tbody/tr[12]/td[10]</td>
+	<td>A-Black</td>
+</tr>
 </tbody></table>
 </body>
 </html>
