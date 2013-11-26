@@ -72,8 +72,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
+	<td>click</td>
 	<td>link=Direct Invoice</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForVisible</td>
+	<td>name=supp_ref</td>
 	<td></td>
 </tr>
 <tr>
@@ -183,7 +188,7 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>id=ProcessOrder</td>
+	<td>//html/body/table/tbody/tr/td/table/tbody/tr/td/div[2]/form/center[2]/table/tbody/tr/td/div/center/table/tbody/tr[2]/td</td>
 	<td></td>
 </tr>
 <tr>

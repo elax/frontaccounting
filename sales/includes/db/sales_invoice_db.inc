@@ -117,7 +117,7 @@ function write_sales_invoice(&$invoice)
 					($customer['dimension2_id'] != 0 ? $customer["dimension2_id"] : $stock_gl_code["dimension2_id"]));
 				$total += add_gl_trans_customer(ST_SALESINVOICE, $invoice_no, $date_, $sales_account, $dim, $dim2,
 					-$line_taxfree_price ,
-					$invoice->customer_id, "The sales price GL posting could not be inserted");
+					$invoice->customer_id, "The sales price GL posting could not be inserted", 0, $XXX_id);
 
 				if ($invoice_line->discount_percent != 0) {
 

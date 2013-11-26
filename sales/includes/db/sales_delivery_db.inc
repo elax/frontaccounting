@@ -119,7 +119,7 @@ function write_sales_delivery(&$delivery,$bo_policy)
 					$stock_gl_code["inventory_account"], 0, 0, "",
 					(-$delivery_line->standard_cost * $delivery_line->qty_dispatched),
 					PT_CUSTOMER, $delivery->customer_id,
-					"The stock side of the cost of sales GL posting could not be inserted");
+					"The stock side of the cost of sales GL posting could not be inserted", $XXX_id);
 
 			} /* end of if GL and stock integrated and standard cost !=0 */
 
