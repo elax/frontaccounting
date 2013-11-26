@@ -49,7 +49,7 @@ function add_gl_trans($type, $trans_id, $date_, $account, $dimension, $dimension
 		$sql .= ", person_type_id, person_id";
 
 	if ($XXX_id !==null)
-		$sql .= ", XXX_id";
+		$sql .= ", stock_id";
 
 
 	$sql .= ") ";
