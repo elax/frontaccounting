@@ -117,7 +117,6 @@ function work_order_quick_costs($woid, $stock_id, $units_reqd, $date_, $advanced
 {
 	global $wo_cost_types;
 	$result = get_bom($stock_id);
-	$XXX_id = $stock_id;
 
 	// credit all the components
 	$total_cost = 0;
@@ -125,6 +124,7 @@ function work_order_quick_costs($woid, $stock_id, $units_reqd, $date_, $advanced
 	$total_material_cost = 0;
 	while ($bom_item = db_fetch($result))
 	{
+		$XXX_id = $bom_item["component"];
 		$bom_accounts = get_stock_gl_code($bom_item["component"]);
 
 		$bom_cost = $bom_item["ComponentCost"] * $units_reqd;
@@ -150,6 +150,7 @@ function work_order_quick_costs($woid, $stock_id, $units_reqd, $date_, $advanced
 			$memo, -$bom_cost, null, null, "", $XXX_id);
 		$total_material_cost += $bom_cost;
 	}
+	$XXX_id = $stock_id;
 	if ($advanced)
 	{
 		//Chaitanya: Material cost added at time of production as per BOM at the time and in adjustment mode.
