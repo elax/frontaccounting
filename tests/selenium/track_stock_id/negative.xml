@@ -72,6 +72,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForVisible</td>
+	<td>name=qty</td>
+	<td></td>
+</tr>
+<tr>
 	<td>type</td>
 	<td>name=qty</td>
 	<td>12</td>
@@ -124,6 +129,81 @@
 <tr>
 	<td>verifyText</td>
 	<td>//html/body/table/tbody/tr/td/table/tbody/tr/td/div[2]/div/center/table/tbody/tr[3]/td[10]</td>
+	<td>A-Black</td>
+</tr>
+<tr>
+	<td>selectWindow</td>
+	<td>null</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//a[7]/u</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Void a Transaction</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>name=filterType</td>
+	<td>label=Purchase Order Delivery</td>
+</tr>
+<tr>
+	<td>waitForVisible</td>
+	<td>name=Edit1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>name=Edit1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForText</td>
+	<td>//html/body/table/tbody/tr/td/table/tbody/tr/td/div[2]/form/center[2]/table/tbody/tr/td[2]</td>
+	<td>1</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=ProcessVoiding</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForVisible</td>
+	<td>id=ConfirmVoiding</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=ConfirmVoiding</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>gl/inquiry/gl_account_inquiry.php?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForVisible</td>
+	<td>id=Show</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=Show</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForVisible</td>
+	<td>//html/body/table/tbody/tr/td/table/tbody/tr/td/div[2]/div/center/table/tbody/tr[5]/td[10]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//html/body/table/tbody/tr/td/table/tbody/tr/td/div[2]/div/center/table/tbody/tr[5]/td[10]</td>
 	<td>A-Black</td>
 </tr>
 
