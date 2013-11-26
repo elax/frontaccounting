@@ -68,6 +68,8 @@ else if ($dim == 1)
 else		
 	$th = array(_("Account Code"), _("Account Name"),
 		_("Debit"), _("Credit"), _("Memo"));
+
+	$th[]= _("Item");
 $k = 0; //row colour counter
 $heading_shown = false;
 
@@ -94,6 +96,7 @@ while ($myrow = db_fetch($result))
 
 	display_debit_or_credit_cells($myrow['amount']);
 	label_cell($myrow['memo_']);
+	label_cell($myrow['stock_id']); // XXX_id
 	end_row();
     if ($myrow['amount'] > 0 ) 
     	$debit += $myrow['amount'];
@@ -110,6 +113,7 @@ if ($heading_shown)
         label_cell('');
     amount_cell($debit);
     amount_cell(-$credit);
+    label_cell('');
     label_cell('');
     end_row();
 	end_table(1);
