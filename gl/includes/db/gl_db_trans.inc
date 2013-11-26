@@ -81,17 +81,17 @@ function add_gl_trans($type, $trans_id, $date_, $account, $dimension, $dimension
 // $amount is in HOME currency
 
 function add_gl_trans_std_cost($type, $trans_id, $date_, $account, $dimension, $dimension2,
-	$memo_,	$amount, $person_type_id=null, $person_id=null, $err_msg="", $XXX_id)
+	$memo_,	$amount, $person_type_id=null, $person_id=null, $err_msg="", $XXX_id=null)
 {
 	if ($amount != 0)
 		return add_gl_trans($type, $trans_id, $date_, $account, $dimension, $dimension2, $memo_,
-			$amount, null, $person_type_id, $person_id, $err_msg, $XXX_id);
+			$amount, null, $person_type_id, $person_id, $err_msg, 0, $XXX_id);
 	else
 		return 0;
 }
 
 // Function for even out rounding problems
-function add_gl_balance($type, $trans_id, $date_, $amount, $person_type_id=null, $person_id=null, $XXX_id)
+function add_gl_balance($type, $trans_id, $date_, $amount, $person_type_id=null, $person_id=null, $XXX_id=null)
 {
 	$amount = round2($amount, user_price_dec());
 
