@@ -151,6 +151,66 @@
 	<td>//html/body/table/tbody/tr/td/table/tbody/tr/td/div[2]/center[2]/table/tbody/tr[4]/td[7]</td>
 	<td>A-Black</td>
 </tr>
+<tr>
+	<td>click</td>
+	<td>link=Close</td>
+	<td></td>
+</tr>
+<tr>
+	<td>selectWindow</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Sales</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Direct Invoice</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=price</td>
+	<td>20.00</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=AddItem</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>id=ProcessOrder</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=ProcessOrder</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=View the GL Journal Entries for this Invoice</td>
+	<td></td>
+</tr>
+<tr>
+	<td>selectPopUpAndWait</td>
+	<td></td>
+	<td>30000</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//html/body/table/tbody/tr/td/table/tbody/tr/td/div[2]/center[2]/table/tbody/tr/td[7]</td>
+	<td>Item</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//html/body/table/tbody/tr/td/table/tbody/tr/td/div[2]/center[2]/table/tbody/tr[2]/td[7]</td>
+	<td>A-Black</td>
+</tr>
 </tbody></table>
 </body>
 </html>
