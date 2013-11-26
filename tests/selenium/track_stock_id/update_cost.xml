@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://localhost:8080/" />
+<title>update_cost</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">update_cost</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/admin/backups.php?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Logout</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=b</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=user_name_entry_field</td>
+	<td>admin</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=password</td>
+	<td>p</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=SubmitUser</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Setup</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Backup and Restore</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>name=backups</td>
+	<td>label=fa_0_20131126_1828.sql</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=restore</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertConfirmation</td>
+	<td>You are about to restore database from backup file.<br />Do you want to continue?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Items and Inventory</td>
+	<td></td>
+</tr>
+<tr>
+	<td>selectWindow</td>
+	<td>null</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Standard Costs</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=material_cost</td>
+	<td>5</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=UpdateData</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForVisible</td>
+	<td>link=View the GL Journal Entries for this Cost Update</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=View the GL Journal Entries for this Cost Update</td>
+	<td></td>
+</tr>
+<tr>
+	<td>selectPopUpAndWait</td>
+	<td></td>
+	<td>30000</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//html/body/table/tbody/tr/td/table/tbody/tr/td/div[2]/center[2]/table/tbody/tr[2]/td[7]</td>
+	<td>A-Black</td>
+</tr>
+
+</tbody></table>
+</body>
+</html>
