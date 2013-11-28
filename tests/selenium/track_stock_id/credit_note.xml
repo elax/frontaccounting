@@ -107,8 +107,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>clickAndWait</td>
 	<td>id=Commit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForVisible</td>
+	<td>link=Sales</td>
 	<td></td>
 </tr>
 <tr>
@@ -142,18 +147,38 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForVisible</td>
+	<td>id=ProcessOrder</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>id=ProcessOrder</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
+	<td>waitForVisible</td>
 	<td>link=Sales</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
+	<td>click</td>
+	<td>link=Sales</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForVisible</td>
 	<td>link=Customer Credit Notes</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Customer Credit Notes</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForVisible</td>
+	<td>name=qty</td>
 	<td></td>
 </tr>
 <tr>
@@ -197,7 +222,6 @@
 	<td></td>
 </tr>
 <tr>
-<tr>
 	<td>click</td>
 	<td>id=grn_item_id1</td>
 	<td></td>
@@ -218,19 +242,89 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
+	<td>waitForVisible</td>
 	<td>link=Banking and General Ledger</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
+	<td>click</td>
+	<td>link=Banking and General Ledger</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForVisible</td>
 	<td>link=GL Inquiry</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=GL Inquiry</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForVisible</td>
+	<td>id=Show</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
 	<td>id=Show</td>
 	<td></td>
+</tr>
+<tr>
+	<td>waitForVisible</td>
+	<td>//html/body/table/tbody/tr/td/table/tbody/tr/td/div[2]/div/center/table/tbody/tr[13]/td[10]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//html/body/table/tbody/tr/td/table/tbody/tr/td/div[2]/div/center/table/tbody/tr[2]/td[10]</td>
+	<td>A-Black</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//html/body/table/tbody/tr/td/table/tbody/tr/td/div[2]/div/center/table/tbody/tr[3]/td[10]</td>
+	<td>A-Black</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//html/body/table/tbody/tr/td/table/tbody/tr/td/div[2]/div/center/table/tbody/tr[5]/td[10]</td>
+	<td>A-Black</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//html/body/table/tbody/tr/td/table/tbody/tr/td/div[2]/div/center/table/tbody/tr[6]/td[10]</td>
+	<td>A-Black</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//html/body/table/tbody/tr/td/table/tbody/tr/td/div[2]/div/center/table/tbody/tr[7]/td[10]</td>
+	<td>A-Black</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//html/body/table/tbody/tr/td/table/tbody/tr/td/div[2]/div/center/table/tbody/tr[8]/td[10]</td>
+	<td>A-Black</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//html/body/table/tbody/tr/td/table/tbody/tr/td/div[2]/div/center/table/tbody/tr[9]/td[10]</td>
+	<td>A-Black</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//html/body/table/tbody/tr/td/table/tbody/tr/td/div[2]/div/center/table/tbody/tr[10]/td[10]</td>
+	<td>A-Black</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//html/body/table/tbody/tr/td/table/tbody/tr/td/div[2]/div/center/table/tbody/tr[14]/td[10]</td>
+	<td>A-Black</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//html/body/table/tbody/tr/td/table/tbody/tr/td/div[2]/div/center/table/tbody/tr[15]/td[10]</td>
+	<td>A-Black</td>
 </tr>
 </tbody></table>
 </body>
