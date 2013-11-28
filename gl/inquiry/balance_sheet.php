@@ -42,12 +42,14 @@ if (isset($_GET["Dimension"]))
 	$_POST["Dimension"] = $_GET["Dimension"];
 if (isset($_GET["Dimension2"]))
 	$_POST["Dimension2"] = $_GET["Dimension2"];
+if (isset($_GET["item_filter"]))
+	$_POST["item_filter"] = $_GET["item_filter"];
 if (isset($_GET["AccGrp"]))
 	$_POST["AccGrp"] = $_GET["AccGrp"];	
 
 //----------------------------------------------------------------------------------------------------
 
-function display_type ($type, $typename, $from, $to, $convert, $dimension, $dimension2, $drilldown, $path_to_root)
+function display_type ($type, $typename, $from, $to, $convert, $dimension, $dimension2, $drilldown, $path_to_root, $item_filter)
 {
 	global $levelptr, $k;
 	
@@ -59,7 +61,7 @@ function display_type ($type, $typename, $from, $to, $convert, $dimension, $dime
 		
  	while ($account=db_fetch($result))
     {
-        $net_balance = get_gl_trans_from_to("", $to, $account["account_code"], $dimension, $dimension2);
+        $net_balance = get_gl_trans_from_to("", $to, $account["account_code"], $dimension, $dimension2, $item_filter);
         if (!$net_balance)
             continue;
         
@@ -67,6 +69,7 @@ function display_type ($type, $typename, $from, $to, $convert, $dimension, $dime
         {
             $url = "<a href='$path_to_root/gl/inquiry/gl_account_inquiry.php?TransFromDate=" 
                 . $from . "&TransToDate=" . $to . "&Dimension=" . $dimension . "&Dimension2=" . $dimension2 
+								."&item_filter=".$item_filter
                 . "&account=" . $account['account_code'] . "'>" . $account['account_code'] 
                 ." ". $account['account_name'] ."</a>";                
                 
@@ -86,7 +89,7 @@ function display_type ($type, $typename, $from, $to, $convert, $dimension, $dime
 	while ($accounttype=db_fetch($result))
 	{			
 		$typestotal += display_type($accounttype["id"], $accounttype["name"], $from, $to, 
-			$convert, $dimension, $dimension2, $drilldown, $path_to_root);	
+			$convert, $dimension, $dimension2, $drilldown, $path_to_root, $item_filter);	
 	}
 
 	//Display Type Summary if total is != 0  
@@ -108,6 +111,7 @@ function display_type ($type, $typename, $from, $to, $convert, $dimension, $dime
 		{
 			$url = "<a href='$path_to_root/gl/inquiry/balance_sheet.php?TransFromDate=" 
 				. $from . "&TransToDate=" . $to . "&Dimension=" . $dimension . "&Dimension2=" . $dimension2 
+				."&item_filter=".$item_filter
 				. "&AccGrp=" . $type ."'>" . $type . " " . $typename ."</a>";
 				
 			alt_table_row_color($k);
@@ -128,6 +132,7 @@ function inquiry_controls()
 		dimensions_list_cells(_("Dimension")." 1:", 'Dimension', null, true, " ", false, 1);
 	if ($dim > 1)
 		dimensions_list_cells(_("Dimension")." 2:", 'Dimension2', null, true, " ", false, 2);
+	ref_cells("Item filter:", "item_filter");
 	submit_cells('Show',_("Show"),'','', 'default');
     end_table();
 
@@ -148,6 +153,7 @@ function display_balance_sheet()
 		$_POST['Dimension2'] = 0;
 	$dimension = $_POST['Dimension'];
 	$dimension2 = $_POST['Dimension2'];
+	$item_filter = $_POST['item_filter'];
 	$lconvert = $econvert = 1;
 	if (isset($_POST["AccGrp"]) && (strlen($_POST['AccGrp']) > 0))
 		$drilldown = 1; // Deeper Level
@@ -185,12 +191,13 @@ function display_balance_sheet()
 			while ($accounttype=db_fetch($typeresult))
 			{
 				$TypeTotal = display_type($accounttype["id"], $accounttype["name"], $from, $to, 
-						$convert, $dimension, $dimension2, $drilldown, $path_to_root);	
+						$convert, $dimension, $dimension2, $drilldown, $path_to_root, $item_filter);	
 				//Print Summary 
 				if ($TypeTotal != 0 )
 				{
 					$url = "<a href='$path_to_root/gl/inquiry/balance_sheet.php?TransFromDate=" 
 						. $from . "&TransToDate=" . $to . "&Dimension=" . $dimension . "&Dimension2=" . $dimension2 
+						. "&item_filter=". $item_filter
 						. "&AccGrp=" . $accounttype['id'] ."'>" . $accounttype['id']." ".$accounttype['name'] ."</a>";	
 					alt_table_row_color($k);
 					label_cell($url);
@@ -225,6 +232,7 @@ function display_balance_sheet()
 		//Final Report Summary
 		$url = "<a href='$path_to_root/gl/inquiry/profit_loss.php?TransFromDate=" 
 				. $from."&TransToDate=".$to . "&Dimension=" . $dimension . "&Dimension2=" . $dimension2
+				. "&item_filter=". $item_filter
 			."&Compare=0'>"._('Calculated Return')."</a>";		
 		
 		start_row("class='inquirybg' style='font-weight:bold'");
@@ -252,7 +260,7 @@ function display_balance_sheet()
 		table_section_title($_POST["AccGrp"]. " " . get_account_type_name($_POST["AccGrp"]));	
 		
 		$classclose = display_type($accounttype["id"], $accounttype["name"], $from, $to, 
-			$convert, $dimension, $dimension2, $drilldown, $path_to_root);
+			$convert, $dimension, $dimension2, $drilldown, $path_to_root, $item_filter);
 	}
 	
 	end_table(1); // outer table
