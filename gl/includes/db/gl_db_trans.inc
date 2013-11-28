@@ -233,7 +233,7 @@ function get_gl_trans_from_to($from_date, $to_date, $account, $dimension=0, $dim
 }
 
 //----------------------------------------------------------------------------------------------------
-function get_balance($account, $dimension, $dimension2, $from, $to, $from_incl=true, $to_incl=true) 
+function get_balance($account, $dimension, $dimension2, $from, $to, $from_incl=true, $to_incl=true, $item_filter=null) 
 {
 	$sql = "SELECT SUM(IF(amount >= 0, amount, 0)) as debit, 
 		SUM(IF(amount < 0, -amount, 0)) as credit, SUM(amount) as balance 
@@ -259,6 +259,13 @@ function get_balance($account, $dimension, $dimension2, $from, $to, $from_incl=t
 		$sql .= " tran_date <= '$to_date' ";
 	else
 		$sql .= " tran_date < '$to_date' ";
+
+	if($item_filter) {
+		if(sscanf($item_filter, "/%s", $regexp)==1)
+			$sql .= " AND stock_id rlike '"._($regexp)."'";
+		else
+			$sql .= " AND stock_id like '"._($item_filter)."'";
+	}
 
 	$result = db_query($sql,"No general ledger accounts were returned");
 

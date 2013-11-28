@@ -57,6 +57,7 @@ function gl_inquiry_controls()
 		dimensions_list_cells(_("Dimension")." 1:", 'Dimension', null, true, " ", false, 1);
 	if ($dim > 1)
 		dimensions_list_cells(_("Dimension")." 2:", 'Dimension2', null, true, " ", false, 2);
+	ref_cells("Item filter:", "item_filter");
 	check_cells(_("No zero values"), 'NoZero', null);
 	check_cells(_("Only balances"), 'Balance', null);
 
@@ -101,14 +102,14 @@ function display_trial_balance($type, $typename)
 		// If we want to remove the balanced part for the past years, this option removes the common part from from the prev and tot figures.
 		if (@$clear_trial_balance_opening)
 		{
-			$open = get_balance($account["account_code"], $_POST['Dimension'], $_POST['Dimension2'], $begin,  $begin, false, true);
+			$open = get_balance($account["account_code"], $_POST['Dimension'], $_POST['Dimension2'], $begin,  $begin, false, true, $_POST['item_filter']);
 			$offset = min($open['debit'], $open['credit']);
 		} else
 			$offset = 0;
 
-		$prev = get_balance($account["account_code"], $_POST['Dimension'], $_POST['Dimension2'], $begin, $_POST['TransFromDate'], false, false);
-		$curr = get_balance($account["account_code"], $_POST['Dimension'], $_POST['Dimension2'], $_POST['TransFromDate'], $_POST['TransToDate'], true, true);
-		$tot = get_balance($account["account_code"], $_POST['Dimension'], $_POST['Dimension2'], $begin, $_POST['TransToDate'], false, true);
+		$prev = get_balance($account["account_code"], $_POST['Dimension'], $_POST['Dimension2'], $begin, $_POST['TransFromDate'], false, false, $_POST['item_filter']);
+		$curr = get_balance($account["account_code"], $_POST['Dimension'], $_POST['Dimension2'], $_POST['TransFromDate'], $_POST['TransToDate'], true, true, $_POST['item_filter']);
+		$tot = get_balance($account["account_code"], $_POST['Dimension'], $_POST['Dimension2'], $begin, $_POST['TransToDate'], false, true, $_POST['item_filter']);
 		if (check_value("NoZero") && !$prev['balance'] && !$curr['balance'] && !$tot['balance'])
 			continue;
 		alt_table_row_color($k);
