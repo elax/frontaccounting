@@ -44,13 +44,15 @@ if (isset($_GET["Dimension"]))
 	$_POST["Dimension"] = $_GET["Dimension"];
 if (isset($_GET["Dimension2"]))
 	$_POST["Dimension2"] = $_GET["Dimension2"];
+if (isset($_GET["item_filter"]))
+	$_POST["item_filter"] = $_GET["item_filter"];
 if (isset($_GET["AccGrp"]))
 	$_POST["AccGrp"] = $_GET["AccGrp"];
 
 //----------------------------------------------------------------------------------------------------
 
 function display_type ($type, $typename, $from, $to, $begin, $end, $compare, $convert,
-	&$dec, &$pdec, &$rep, $dimension=0, $dimension2=0, $drilldown, $path_to_root)
+	&$dec, &$pdec, &$rep, $dimension=0, $dimension2=0, $drilldown, $path_to_root, $item_filter)
 {
 	global $levelptr, $k;
 		
@@ -66,12 +68,12 @@ function display_type ($type, $typename, $from, $to, $begin, $end, $compare, $co
 		
 	while ($account=db_fetch($result))
 	{
-		$per_balance = get_gl_trans_from_to($from, $to, $account["account_code"], $dimension, $dimension2);
+		$per_balance = get_gl_trans_from_to($from, $to, $account["account_code"], $dimension, $dimension2, $item_filter);
 
 		if ($compare == 2)
-			$acc_balance = get_budget_trans_from_to($begin, $end, $account["account_code"], $dimension, $dimension2);
+			$acc_balance = get_budget_trans_from_to($begin, $end, $account["account_code"], $dimension, $dimension2, $item_filter);
 		else
-			$acc_balance = get_gl_trans_from_to($begin, $end, $account["account_code"], $dimension, $dimension2);
+			$acc_balance = get_gl_trans_from_to($begin, $end, $account["account_code"], $dimension, $dimension2, $item_filter);
 		if (!$per_balance && !$acc_balance)
 			continue;
 		
@@ -79,6 +81,7 @@ function display_type ($type, $typename, $from, $to, $begin, $end, $compare, $co
 		{
 			$url = "<a href='$path_to_root/gl/inquiry/gl_account_inquiry.php?TransFromDate=" 
 				. $from . "&TransToDate=" . $to . "&Dimension=" . $dimension . "&Dimension2=" . $dimension2 
+				. "&item_filter=". $item_filter
 				. "&account=" . $account['account_code'] . "'>" . $account['account_code'] 
 				." ". $account['account_name'] ."</a>";				
 				
@@ -101,7 +104,7 @@ function display_type ($type, $typename, $from, $to, $begin, $end, $compare, $co
 	while ($accounttype=db_fetch($result))
 	{	
 		$totals_arr = display_type($accounttype["id"], $accounttype["name"], $from, $to, $begin, $end, 
-			$compare, $convert, $dec, $pdec, $rep, $dimension, $dimension2, $drilldown, $path_to_root);
+			$compare, $convert, $dec, $pdec, $rep, $dimension, $dimension2, $drilldown, $path_to_root, $item_filter);
 		$per_balance_total += $totals_arr[0];
 		$acc_balance_total += $totals_arr[1];
 	}
@@ -179,6 +182,7 @@ function inquiry_controls()
 		dimensions_list_cells(_("Dimension")." 1:", 'Dimension', null, true, " ", false, 1);
 	if ($dim > 1)
 		dimensions_list_cells(_("Dimension")." 2:", 'Dimension2', null, true, " ", false, 2);
+	ref_cells("Item filter:", "item_filter");
 	
 	submit_cells('Show',_("Show"),'','', 'default');
     end_table();
@@ -198,6 +202,7 @@ function display_profit_and_loss()
 		$_POST['Dimension2'] = 0;
 	$dimension = $_POST['Dimension'];
 	$dimension2 = $_POST['Dimension2'];
+	$item_filter = $_POST['item_filter'];
 
 	$from = $_POST['TransFromDate'];
 	$to = $_POST['TransToDate'];
@@ -263,7 +268,7 @@ function display_profit_and_loss()
 			while ($accounttype=db_fetch($typeresult))
 			{
 				$TypeTotal = display_type($accounttype["id"], $accounttype["name"], $from, $to, $begin, $end, $compare, $convert, 
-					$dec, $pdec, $rep, $dimension, $dimension2, $drilldown, $path_to_root);
+					$dec, $pdec, $rep, $dimension, $dimension2, $drilldown, $path_to_root, $item_filter);
 				$class_per_total += $TypeTotal[0];
 				$class_acc_total += $TypeTotal[1];	
 
@@ -271,6 +276,7 @@ function display_profit_and_loss()
 				{
 					$url = "<a href='$path_to_root/gl/inquiry/profit_loss.php?TransFromDate=" 
 						. $from . "&TransToDate=" . $to . "&Compare=" . $compare . "&Dimension=" . $dimension . "&Dimension2=" . $dimension2
+						."&item_filter=".$item_filter
 						. "&AccGrp=" . $accounttype['id'] ."'>" . $accounttype['id'] . " " . $accounttype['name'] ."</a>";
 						
 					alt_table_row_color($k);
@@ -319,7 +325,7 @@ function display_profit_and_loss()
 		echo $tableheader;
 		
 		$classtotal = display_type($accounttype["id"], $accounttype["name"], $from, $to, $begin, $end, $compare, $convert, 
-			$dec, $pdec, $rep, $dimension, $dimension2, $drilldown, $path_to_root);
+			$dec, $pdec, $rep, $dimension, $dimension2, $drilldown, $path_to_root, $item_filter);
 		
 	}
 		

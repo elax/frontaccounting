@@ -214,7 +214,7 @@ function get_gl_balance_from_to($from_date, $to_date, $account, $dimension=0, $d
 
 //--------------------------------------------------------------------------------
 
-function get_gl_trans_from_to($from_date, $to_date, $account, $dimension=0, $dimension2=0)
+function get_gl_trans_from_to($from_date, $to_date, $account, $dimension=0, $dimension2=0, $item_filter)
 {
 	$from = date2sql($from_date);
 	$to = date2sql($to_date);
@@ -229,6 +229,7 @@ function get_gl_trans_from_to($from_date, $to_date, $account, $dimension=0, $dim
   		$sql .= " AND dimension_id = ".($dimension<0?0:db_escape($dimension));
 	if ($dimension2 != 0)
   		$sql .= " AND dimension2_id = ".($dimension2<0?0:db_escape($dimension2));
+	$sql .= filter_item_condition($item_filter);
 
 	$result = db_query($sql, "Transactions for account $account could not be calculated");
 
@@ -284,7 +285,7 @@ function get_balance($account, $dimension, $dimension2, $from, $to, $from_incl=t
 
 //--------------------------------------------------------------------------------
 
-function get_budget_trans_from_to($from_date, $to_date, $account, $dimension=0, $dimension2=0)
+function get_budget_trans_from_to($from_date, $to_date, $account, $dimension=0, $dimension2=0, $item_fiter=null)
 {
 
 	$from = date2sql($from_date);
@@ -300,6 +301,7 @@ function get_budget_trans_from_to($from_date, $to_date, $account, $dimension=0, 
   		$sql .= " AND dimension_id = ".($dimension<0?0:db_escape($dimension));
 	if ($dimension2 != 0)
   		$sql .= " AND dimension2_id = ".($dimension2<0?0:db_escape($dimension2));
+	//$sql .= filter_item_condition($item_fiter);
 	$result = db_query($sql,"No budget accounts were returned");
 
 	$row = db_fetch_row($result);
