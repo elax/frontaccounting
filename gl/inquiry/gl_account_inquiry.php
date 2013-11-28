@@ -48,6 +48,8 @@ if (isset($_GET["Dimension"]))
 	$_POST["Dimension"] = $_GET["Dimension"];
 if (isset($_GET["Dimension2"]))
 	$_POST["Dimension2"] = $_GET["Dimension2"];
+if (isset($_GET["item_filter"]))
+	$_POST["item_filter"] = $_GET["item_filter"];
 if (isset($_GET["amount_min"]))
 	$_POST["amount_min"] = $_GET["amount_min"];
 if (isset($_GET["amount_max"]))
@@ -79,6 +81,7 @@ function gl_inquiry_controls()
 		dimensions_list_cells(_("Dimension")." 1:", 'Dimension', null, true, " ", false, 1);
 	if ($dim > 1)
 		dimensions_list_cells(_("Dimension")." 2:", 'Dimension2', null, true, " ", false, 2);
+	ref_cells("Item filter:", "item_filter");
 
 	small_amount_cells(_("Amount min:"), 'amount_min', null, " ");
 	small_amount_cells(_("Amount max:"), 'amount_max', null, " ");
@@ -109,7 +112,7 @@ function show_results()
     	$_POST['Dimension2'] = 0;
 	$result = get_gl_transactions($_POST['TransFromDate'], $_POST['TransToDate'], -1,
     	$_POST["account"], $_POST['Dimension'], $_POST['Dimension2'], null,
-    	input_num('amount_min'), input_num('amount_max'));
+    	input_num('amount_min'), input_num('amount_max'), $_POST['item_filter']);
 
 	$colspan = ($dim == 2 ? "6" : ($dim == 1 ? "5" : "4"));
 

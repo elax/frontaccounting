@@ -108,7 +108,7 @@ function add_gl_balance($type, $trans_id, $date_, $amount, $person_type_id=null,
 
 function get_gl_transactions($from_date, $to_date, $trans_no=0,
 	$account=null, $dimension=0, $dimension2=0, $filter_type=null,
-	$amount_min=null, $amount_max=null)
+	$amount_min=null, $amount_max=null, $item_filter)
 {
 	global $show_voided_gl_trans;
 	
@@ -148,6 +148,8 @@ function get_gl_transactions($from_date, $to_date, $trans_no=0,
 	if ($amount_max != null)
 		$sql .= " AND ABS(".TB_PREF."gl_trans.amount) <= ABS(".db_escape($amount_max).")";
 
+	$sql .= filter_item_condition($item_filter);
+
 	$sql .= " ORDER BY tran_date, counter";
 
 	return db_query($sql, "The transactions for could not be retrieved");
@@ -186,7 +188,7 @@ function get_gl_wo_cost_trans($trans_id, $person_id=-1)
 	return db_query($sql, "The gl transactions could not be retrieved");
 }
 
-function get_gl_balance_from_to($from_date, $to_date, $account, $dimension=0, $dimension2=0)
+function get_gl_balance_from_to($from_date, $to_date, $account, $dimension=0, $dimension2=0, $item_filter)
 {
 	$from = date2sql($from_date);
 	$to = date2sql($to_date);
@@ -201,6 +203,8 @@ function get_gl_balance_from_to($from_date, $to_date, $account, $dimension=0, $d
   		$sql .= " AND dimension_id = ".($dimension<0?0:db_escape($dimension));
 	if ($dimension2 != 0)
   		$sql .= " AND dimension2_id = ".($dimension2<0?0:db_escape($dimension2));
+
+	$sql .= filter_item_condition($item_filter);
 
 	$result = db_query($sql, "The starting balance for account $account could not be calculated");
 
@@ -232,6 +236,17 @@ function get_gl_trans_from_to($from_date, $to_date, $account, $dimension=0, $dim
 	return (float)$row[0];
 }
 
+function filter_item_condition($item_filter) {
+	if($item_filter) {
+		if(sscanf($item_filter, "/%s", $regexp)==1)
+			return " AND stock_id rlike '"._($regexp)."'";
+		else
+			return " AND stock_id like '"._($item_filter)."'";
+	} else {
+		return "";
+	}
+}
+
 //----------------------------------------------------------------------------------------------------
 function get_balance($account, $dimension, $dimension2, $from, $to, $from_incl=true, $to_incl=true, $item_filter=null) 
 {
@@ -260,12 +275,7 @@ function get_balance($account, $dimension, $dimension2, $from, $to, $from_incl=t
 	else
 		$sql .= " tran_date < '$to_date' ";
 
-	if($item_filter) {
-		if(sscanf($item_filter, "/%s", $regexp)==1)
-			$sql .= " AND stock_id rlike '"._($regexp)."'";
-		else
-			$sql .= " AND stock_id like '"._($item_filter)."'";
-	}
+	$sql .= filter_item_condition($item_filter);
 
 	$result = db_query($sql,"No general ledger accounts were returned");
 
