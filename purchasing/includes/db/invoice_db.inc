@@ -162,6 +162,7 @@ function add_supp_invoice($supp_trans, $invoice_no=0) // do not receive as ref b
 		$invoice_items_total, $item_added_tax, $supp_trans->ov_discount, "", 0, $supp_trans->tax_included);
 
 	$total = 0;
+	$total_paid=0; // send to payable account
 
     /* Now the TAX account */
     $taxes = $supp_trans->get_taxes($supp_trans->tax_group_id, 0, false);
@@ -193,11 +194,6 @@ function add_supp_invoice($supp_trans, $invoice_no=0) // do not receive as ref b
     if ($trans_type == ST_SUPPCREDIT)
 		$net_diff = -$net_diff;
 
-    /* Now the AP account */
-    $total += add_gl_trans_supplier($trans_type, $invoice_id, $date_, $supplier["payable_account"], 0, 0,
-		-($invoice_items_total +  $item_added_tax + $supp_trans->ov_discount),
-		$supp_trans->supplier_id,
-		"The general ledger transaction for the control total could not be added");
 
     foreach ($supp_trans->gl_codes as $entered_gl_code)
     {
@@ -250,6 +246,14 @@ function add_supp_invoice($supp_trans, $invoice_no=0) // do not receive as ref b
 
 		$dim = $supplier['dimension_id'] ? $supplier['dimension_id'] : $stock_gl_code['dimension_id'];
 		$dim2 = $supplier['dimension2_id'] ? $supplier['dimension2_id'] : $stock_gl_code['dimension2_id'];
+			/* Now the AP account */
+			$invoiced = add_gl_trans_supplier($trans_type, $invoice_id, $date_, $supplier["payable_account"], 0, 0,
+			-$taxfree_line,
+			$supp_trans->supplier_id,
+			"The general ledger transaction for the control total could not be added", 0, "", $XXX_id);
+			$total += $invoiced;
+			$total_paid += $invoiced; // less to post in the final total
+			// In theory invoice_items_total should be null once all items processed, but we never know.
     	if ($trans_type == ST_SUPPCREDIT)
 		{
 			$iv_act = (is_inventory_item($entered_grn->item_code) ? $stock_gl_code["inventory_account"] : 
@@ -332,6 +336,12 @@ function add_supp_invoice($supp_trans, $invoice_no=0) // do not receive as ref b
 			$entered_grn->item_description, 0, 	$entered_grn->chg_price, $line_tax/$entered_grn->this_quantity_inv,
 			$entered_grn->this_quantity_inv, $entered_grn->id, $entered_grn->po_detail_item, "");
     } /* end of GRN postings */
+
+    /* Now the AP account */
+    $total += add_gl_trans_supplier($trans_type, $invoice_id, $date_, $supplier["payable_account"], 0, 0,
+		-$total_paid-($invoice_items_total +  $item_added_tax + $supp_trans->ov_discount),
+		$supp_trans->supplier_id,
+		"The general ledger transaction for the control total could not be added");
 
 	/*Post a balance post if $total != 0 */
 	add_gl_balance($trans_type, $invoice_id, $date_, -$total, PT_SUPPLIER, $supp_trans->supplier_id); // ??
