@@ -138,6 +138,11 @@
 </tr>
 <tr>
 	<td>type</td>
+	<td>name=Disc</td>
+	<td>10</td>
+</tr>
+<tr>
+	<td>type</td>
 	<td>name=price</td>
 	<td>30.00</td>
 </tr>
@@ -185,6 +190,11 @@
 	<td>type</td>
 	<td>name=qty</td>
 	<td>1</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=Disc</td>
+	<td>10.0</td>
 </tr>
 <tr>
 	<td>type</td>
@@ -298,11 +308,6 @@
 </tr>
 <tr>
 	<td>verifyText</td>
-	<td>//html/body/table/tbody/tr/td/table/tbody/tr/td/div[2]/div/center/table/tbody/tr[7]/td[10]</td>
-	<td>A-Black</td>
-</tr>
-<tr>
-	<td>verifyText</td>
 	<td>//html/body/table/tbody/tr/td/table/tbody/tr/td/div[2]/div/center/table/tbody/tr[8]/td[10]</td>
 	<td>A-Black</td>
 </tr>
@@ -318,12 +323,22 @@
 </tr>
 <tr>
 	<td>verifyText</td>
-	<td>//html/body/table/tbody/tr/td/table/tbody/tr/td/div[2]/div/center/table/tbody/tr[14]/td[10]</td>
+	<td>//html/body/table/tbody/tr/td/table/tbody/tr/td/div[2]/div/center/table/tbody/tr[11]/td[10]</td>
 	<td>A-Black</td>
 </tr>
 <tr>
 	<td>verifyText</td>
-	<td>//html/body/table/tbody/tr/td/table/tbody/tr/td/div[2]/div/center/table/tbody/tr[15]/td[10]</td>
+	<td>//html/body/table/tbody/tr/td/table/tbody/tr/td/div[2]/div/center/table/tbody/tr[12]/td[10]</td>
+	<td>A-Black</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//html/body/table/tbody/tr/td/table/tbody/tr/td/div[2]/div/center/table/tbody/tr[17]/td[10]</td>
+	<td>A-Black</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//html/body/table/tbody/tr/td/table/tbody/tr/td/div[2]/div/center/table/tbody/tr[18]/td[10]</td>
 	<td>A-Black</td>
 </tr>
 </tbody></table>

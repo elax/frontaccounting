@@ -104,6 +104,7 @@ function write_credit_note(&$credit_note, $write_off_acc)
 	}
 
 	$total = 0;
+	$total_paid = 0;
 	foreach ($credit_note->line_items as $credit_line) {
 
 		if ($credit_invoice && $credit_line->qty_dispatched!=$credit_line->qty_old ) {
@@ -127,15 +128,25 @@ function write_credit_note(&$credit_note, $write_off_acc)
 
 		$total += add_gl_trans_credit_costs($credit_note, $credit_line, $credit_no,
 		    $credit_date, $credit_type, $write_off_acc, $branch_data);
+		// post separate receivable account post for each items. 
+		$XXX_id = $credit_line->stock_id;
+		$payable = add_gl_trans_customer(ST_CUSTCREDIT, $credit_no, $credit_date, $branch_data["receivables_account"], 0, 0,
+			-$line_taxfree_price*(1-$credit_line->discount_percent),
+			$credit_note->customer_id,
+			"The total debtor GL posting for the credit note could not be inserted", 0, $XXX_id);
+
+		$total += $payable;
+		$total_paid += -$payable;
 	} /*end of credit_line loop */
 
 	/*Post credit note transaction to GL credit debtors,
 	debit freight re-charged and debit sales */
 
-	if (($credit_note_total + $credit_note->freight_cost) != 0) {
+	$receivable = $credit_note_total - $total_paid + $credit_note->freight_cost + $items_added_tax + $freight_added_tax;
+	if (true  || $receivable != 0) {
 
 		$total += add_gl_trans_customer(ST_CUSTCREDIT, $credit_no, $credit_date, $branch_data["receivables_account"], 0, 0,
-			-($credit_note_total + $credit_note->freight_cost + $items_added_tax + $freight_added_tax),
+			-$receivable,
 			$credit_note->customer_id,
 			"The total debtor GL posting for the credit note could not be inserted");
 	}
@@ -275,14 +286,14 @@ function add_gl_trans_credit_costs($order, $order_line, $credit_no, $date_,
 			$sales_account = $stock_gl_codes['sales_account'];
 		$total += add_gl_trans_customer(ST_CUSTCREDIT, $credit_no, $date_, $sales_account, $dim, $dim2,
 			($line_taxfree_price * $order_line->qty_dispatched), $order->customer_id,
-			"The credit note GL posting could not be inserted", $XXX_id);
+			"The credit note GL posting could not be inserted", 0, $XXX_id);
 
 		if ($order_line->discount_percent != 0) {
 
 			$total += add_gl_trans_customer(ST_CUSTCREDIT, $credit_no, $date_, $branch_data["sales_discount_account"],
 				$dim, $dim2, -($line_taxfree_price * $order_line->qty_dispatched * $order_line->discount_percent),
 				$order->customer_id,
-				"The credit note discount GL posting could not be inserted", $XXX_id);
+				"The credit note discount GL posting could not be inserted", 0, $XXX_id);
 
 		} /*end of if discount !=0 */
 	} /*if line_price!=0 */
