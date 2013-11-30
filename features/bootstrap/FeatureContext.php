@@ -11,14 +11,13 @@ use Behat\Gherkin\Node\PyStringNode,
 // Require 3rd-party libraries here:
 //
 //   require_once 'PHPUnit/Autoload.php';
-//   require_once 'PHPUnit/Framework/Assert/Functions.php';
+//require_once 'PHPUnit/Framework/Assert/Functions.php';
 //
 
-$path_to_root = '.';
-
-require_once('features/bootstrap/shell_tests.php');
+require_once('features/bootstrap/fa.inc');
 
 require_once('gl/includes/db/gl_db_trans.inc');
+
 /**
  * Features context.
  */
@@ -43,6 +42,9 @@ class FeatureContext extends BehatContext
 		}
 
 		public static function setConnection() {
+			global $db;
+set_global_connection(TEST_COMPANY);
+			return  $db;
 
 		}
 		/**
@@ -50,7 +52,13 @@ class FeatureContext extends BehatContext
 		 */
 		public function iHaveACoa()
 		{
-			$this->setConnection();
+/*
+			$db = $this->setConnection();
+				throw new Exception($db);
+			if(is_null($db))
+				throw new Exception('not database');
+*/
+		
 			//throw new PendingException();
 		}
 
@@ -59,6 +67,7 @@ class FeatureContext extends BehatContext
 		 */
 		public function iPostAToAccount($amount, $account)
 		{
+
 			$type = ST_JOURNAL;
 			$trans_id = 1;
 			$date = '2013/12/01';

@@ -10,20 +10,29 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
     See the License here <http://www.gnu.org/licenses/gpl-3.0.html>.
 ***********************************************************************/
-chdir(dirname(__FILE__));
 
-$path_to_root = "../..";
+$path_to_root = ".";
 
-if (php_sapi_name() != 'cli')
-	die('Tests can be run only from command line.');
-
-require_once($path_to_root.'/config_db.php');
-require_once($path_to_root.'/config.default.php');
+require_once('features/bootstrap/config.inc');
 require_once($path_to_root.'/installed_extensions.php');
-require_once('test_cfg.php');
 
+$def_coy = 0;
+
+$tb_pref_counter = 1;
+
+global $db_connections;
+$db_connections = array (
+  0 => 
+  array (
+    'name' => 'behat',
+    'host' => 'localhost',
+    'dbuser' => 'root',
+    'dbpassword' => '',
+    'dbname' => 'fa_behat',
+    'tbpref' => '0_',
+  ),
+);
 error_reporting(-1);
-session_start();
 
 include_once($path_to_root.'/includes/main.inc');
 include_once($path_to_root . "/includes/ajax.inc");
@@ -66,12 +75,10 @@ require_once($path_to_root.'/includes/types.inc');
 //include_once($path_to_root . "/includes/session.inc");
 if (!isset($_SESSION["wa_current_user"]))
 	$_SESSION["wa_current_user"] = new current_user();
-include_once("includes/test_helpers.inc");
 
-require_once(SIMPLETEST."/autorun.php");
-require_once("includes/class.simpletest.inc");
+define('TEST_COMPANY', 0);
+print_r(set_global_connection(TEST_COMPANY));
 
-set_global_connection(TEST_COMPANY);
 
 // initialize test instance database content
 if (@$FA_tests_config['init'])
@@ -79,9 +86,3 @@ if (@$FA_tests_config['init'])
 	echo "Database reset ....\n";
 	db_import('_tests/data/'.$FA_tests_config['init'], $db_connections[TEST_COMPANY]);
 }
-
-
-$test = new FATextTestSuite('Running FA tests...');
-
-$test->run(new FATextTestReporter());
-
