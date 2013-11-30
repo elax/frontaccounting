@@ -14,6 +14,11 @@ use Behat\Gherkin\Node\PyStringNode,
 //   require_once 'PHPUnit/Framework/Assert/Functions.php';
 //
 
+$path_to_root = '.';
+
+require_once('features/bootstrap/shell_tests.php');
+
+require_once('gl/includes/db/gl_db_trans.inc');
 /**
  * Features context.
  */
@@ -30,15 +35,43 @@ class FeatureContext extends BehatContext
         // Initialize your context here
     }
 
-//
-// Place your definition and hook methods here:
-//
-//    /**
-//     * @Given /^I have done something with "([^"]*)"$/
-//     */
-//    public function iHaveDoneSomethingWith($argument)
-//    {
-//        doSomethingWith($argument);
-//    }
-//
+		/**
+	 * @Transform /(\d+\.\d+)/
+	 */
+		public function stringToFload($string) {
+			return floatval($string);
+		}
+
+		public static function setConnection() {
+
+		}
+		/**
+		 *  @Given /^I have a COA$/
+		 */
+		public function iHaveACoa()
+		{
+			$this->setConnection();
+			//throw new PendingException();
+		}
+
+		/**
+		 * @When /^I post a (\d+\.\d+) to account (\d+)$/
+		 */
+		public function iPostAToAccount($amount, $account)
+		{
+			$type = ST_JOURNAL;
+			$trans_id = 1;
+			$date = '2013/12/01';
+			add_gl_trans($type, $trans_id, $date, $account, null, null, "", $amount);
+		}
+
+		/**
+		 * @Then /^the GL transaction should includes:$/
+		 */
+		public function theGlTransactionShouldIncludes(TableNode $table)
+		{
+			throw new PendingException();
+		}
+
 }
+
