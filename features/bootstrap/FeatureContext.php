@@ -14,7 +14,7 @@ use Behat\Gherkin\Node\PyStringNode,
 //require_once 'PHPUnit/Framework/Assert/Functions.php';
 //
 
-require_once('features/bootstrap/fa.inc');
+require_once('features/bootstrap/init_connection.inc');
 
 require_once('gl/includes/db/gl_db_trans.inc');
 
@@ -29,6 +29,10 @@ class FeatureContext extends BehatContext
      *
      * @param array $parameters context parameters (set them up through behat.yml)
      */
+
+		static $db_connection = null;
+		static $backup_name;
+
     public function __construct(array $parameters)
     {
         // Initialize your context here
@@ -42,22 +46,32 @@ class FeatureContext extends BehatContext
 		}
 
 		public static function setConnection() {
-			global $db;
-set_global_connection(TEST_COMPANY);
-			return  $db;
+			self::$db_connection = init_db_connection();
+                                        
+			self::restore_db('en_US-new.sql', self::$db_connection);
+			
+			return  self::$db_connection;
 
 		}
+
+
+	public static function restore_db($backup_name=null) {
+		if(!is_null($backup_name)) {
+			self::$backup_name = $backup_name;
+		}
+
+		return db_import("features/fixtures/$backup_name", self::$db_connection);
+	}
+
+
 		/**
 		 *  @Given /^I have a COA$/
 		 */
 		public function iHaveACoa()
 		{
-/*
 			$db = $this->setConnection();
-				throw new Exception($db);
 			if(is_null($db))
 				throw new Exception('not database');
-*/
 		
 			//throw new PendingException();
 		}

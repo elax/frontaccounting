@@ -16,22 +16,6 @@ $path_to_root = ".";
 require_once('features/bootstrap/config.inc');
 require_once($path_to_root.'/installed_extensions.php');
 
-$def_coy = 0;
-
-$tb_pref_counter = 1;
-
-global $db_connections;
-$db_connections = array (
-  0 => 
-  array (
-    'name' => 'behat',
-    'host' => 'localhost',
-    'dbuser' => 'root',
-    'dbpassword' => '',
-    'dbname' => 'fa_behat',
-    'tbpref' => '0_',
-  ),
-);
 error_reporting(-1);
 
 include_once($path_to_root.'/includes/main.inc');
@@ -76,13 +60,25 @@ require_once($path_to_root.'/includes/types.inc');
 if (!isset($_SESSION["wa_current_user"]))
 	$_SESSION["wa_current_user"] = new current_user();
 
-define('TEST_COMPANY', 0);
-print_r(set_global_connection(TEST_COMPANY));
+function init_db_connection() {
+	global $db_connections, $def_coy;
+	$def_coy = 0;
+	$tb_pref_counter = 1;
+	$db_connections = array (
+		0 => 
+		array (
+			'name' => 'behat',
+			'host' => 'localhost',
+			'dbuser' => 'root',
+			'dbpassword' => '',
+			'dbname' => 'fa_behat',
+			'tbpref' => '0_',
+		),
+	);
+	set_global_connection($def_coy);
+	$connection = $db_connections[$def_coy];
+	db_create_db($connection);
 
+	return $connection;
 
-// initialize test instance database content
-if (@$FA_tests_config['init'])
-{
-	echo "Database reset ....\n";
-	db_import('_tests/data/'.$FA_tests_config['init'], $db_connections[TEST_COMPANY]);
 }
