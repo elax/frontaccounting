@@ -40,7 +40,7 @@ class FeatureContext extends BehatContext
 	}
 
 		/**
-		 * @Transform /(\d+\.\d+)/
+		 * @Transform /(-?\d+\.\d+)/
 		 */
 		public function stringToFload($string) {
 			return floatval($string);
@@ -88,7 +88,7 @@ class FeatureContext extends BehatContext
 
 
 		/**
-		 * @When /^I post a (\d+\.\d+) to account (\d+)$/
+		 * @When /^I post a (-?\d+\.\d+) to account (\d+)$/
 		 */
 		public function iPostAToAccount($amount, $account)
 		{
@@ -115,6 +115,9 @@ class FeatureContext extends BehatContext
 					assertEquals($value, @$row[$key]);
 				}
 			}
+				$row = db_fetch($query);
+			// we shouldn't have any row left
+				assertEquals(false, $row);
 			
     }
 
