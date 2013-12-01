@@ -1,11 +1,13 @@
 <?php
 
 use Behat\Behat\Context\ClosuredContextInterface,
-    Behat\Behat\Context\TranslatedContextInterface,
-    Behat\Behat\Context\BehatContext,
-    Behat\Behat\Exception\PendingException;
+	Behat\Behat\Context\TranslatedContextInterface,
+	Behat\Behat\Context\BehatContext,
+	Behat\Behat\Exception\PendingException;
 use Behat\Gherkin\Node\PyStringNode,
-    Behat\Gherkin\Node\TableNode;
+	Behat\Gherkin\Node\TableNode;
+
+use Behat\Behat\Event\FeatureEvent;
 
 //
 // Require 3rd-party libraries here:
@@ -23,33 +25,35 @@ require_once('gl/includes/db/gl_db_trans.inc');
  */
 class FeatureContext extends BehatContext
 {
-    /**
-     * Initializes context.
-     * Every scenario gets it's own context object.
-     *
-     * @param array $parameters context parameters (set them up through behat.yml)
-     */
+	/**
+	 * Initializes context.
+	 * Every scenario gets it's own context object.
+	 *
+	 * @param array $parameters context parameters (set them up through behat.yml)
+	 */
 
-		static $db_connection = null;
-		static $backup_name;
+	static $db_connection = null;
+	static $backup_name;
 
-    public function __construct(array $parameters)
-    {
-        // Initialize your context here
-    }
+	public function __construct(array $parameters)
+	{
+		// Initialize your context here
+	}
 
 		/**
-	 * @Transform /(\d+\.\d+)/
-	 */
+		 * @Transform /(\d+\.\d+)/
+		 */
 		public function stringToFload($string) {
 			return floatval($string);
 		}
 
-		public static function setConnection() {
+
+		public static function initConnection() {
+			if(self::$db_connection) {
+				return self::$db_connection;
+			}
+
 			self::$db_connection = init_db_connection();
-                                        
-			self::restore_db('en_US-new.sql', self::$db_connection);
-			
 			return  self::$db_connection;
 
 		}
@@ -60,8 +64,29 @@ class FeatureContext extends BehatContext
 			self::$backup_name = $backup_name;
 		}
 
-		return db_import("features/fixtures/$backup_name", self::$db_connection);
+		return db_import("features/fixtures/$backup_name", self::initConnection());
 	}
+
+
+	/**
+ * @BeforeFeature
+ *
+ */
+	public static function auto_import_db(FeatureEvent $event) {
+			self::db_import_from_tags($event->getFeature()->getTags());
+	}
+
+	/* Scan tags to find one like @db:<backup_name> and import it to the database. */
+	public static function db_import_from_tags(array $tags) {
+		foreach($tags as $tag) {
+			if(sscanf($tag, 'db:%s', $name)) {
+				return self::restore_db("$name.sql");
+			}
+		}
+	}
+
+
+
 
 
 		/**
@@ -69,11 +94,7 @@ class FeatureContext extends BehatContext
 		 */
 		public function iHaveACoa()
 		{
-			$db = $this->setConnection();
-			if(is_null($db))
-				throw new Exception('not database');
-		
-			//throw new PendingException();
+
 		}
 
 		/**
