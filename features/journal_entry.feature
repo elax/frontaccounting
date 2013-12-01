@@ -6,9 +6,8 @@ Feature: Journal Entry
 	Scenario: Enter Journal Entry
 		As developper I need to be able to save
 		a GL transaction to the database.
-		Given I have a COA
 		When I post a 100.00 to account 1500	
-		Then the GL transaction should includes:
+		Then the query "select * from 0_gl_trans" should return:
 			|  account  |  debit  |  credit  |
 			|  1500     |  100    |  0|
 

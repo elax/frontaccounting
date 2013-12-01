@@ -13,8 +13,7 @@ use Behat\Behat\Event\FeatureEvent;
 // Require 3rd-party libraries here:
 //
 //   require_once 'PHPUnit/Autoload.php';
-//require_once 'PHPUnit/Framework/Assert/Functions.php';
-//
+require_once 'PHPUnit/Framework/Assert/Functions.php';
 
 require_once('features/bootstrap/init_connection.inc');
 
@@ -88,15 +87,6 @@ class FeatureContext extends BehatContext
 
 
 
-
-		/**
-		 *  @Given /^I have a COA$/
-		 */
-		public function iHaveACoa()
-		{
-
-		}
-
 		/**
 		 * @When /^I post a (\d+\.\d+) to account (\d+)$/
 		 */
@@ -109,13 +99,24 @@ class FeatureContext extends BehatContext
 			add_gl_trans($type, $trans_id, $date, $account, null, null, "", $amount);
 		}
 
-		/**
-		 * @Then /^the GL transaction should includes:$/
-		 */
-		public function theGlTransactionShouldIncludes(TableNode $table)
-		{
-			throw new PendingException();
-		}
+
+    /**
+     * @Then /^the query "([^"]*)" should return:$/
+		 * This function compares the result of an sql query
+		 * with a table
+     */
+    public function theQueryShouldReturn($sql, TableNode $table)
+    {
+			$query = db_query($sql);
+			foreach($table->getHash() as $expected_row) {
+				$row = db_fetch($query);
+				assertEquals(false, is_null($row));
+				foreach($expected_row as $key => $value) {
+					assertEquals($value, @$row[$key]);
+				}
+			}
+			
+    }
 
 }
 
