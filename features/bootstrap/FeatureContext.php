@@ -9,6 +9,11 @@ use Behat\Gherkin\Node\PyStringNode,
 
 use Behat\Behat\Event\FeatureEvent;
 
+// Steps
+use Behat\Behat\Context\Step\Given,
+	Behat\Behat\Context\Step\When,
+	Behat\Behat\Context\Step\Then;
+
 // Mink
 
 use Behat\MinkExtension\Context\MinkContext;
@@ -124,6 +129,82 @@ class FeatureContext extends MinkContext
 				assertEquals(false, $row);
 			
     }
+
+
+    /**
+     * @Given /^I\'m logged$/
+     */
+    public function iMLogged()
+    {
+			return array(
+				new Given('I am on "/"'),
+				new Then('I fill in "user_name_entry_field" with "admin"'),
+				new Then('I fill in "password" with "p"'),
+				new Then('I press "Login"')
+			);
+    }
+
+    /**
+     * @When /^"([^"]*)" do a direct GRN to "DEF":$/
+     */
+    public function doADirectGrnToDef($supplier, TableNode $table)
+    {
+			return array(
+				new Given('I am on "purchasing/po_entry_items.php?NewGRN=Yes"'),
+				new Given('I select "S1" from "supplier_id"'),
+				new When('I fill the purchase cart:', $table),
+				new Then('I press "Process GRN"'),
+				new Then('I follow "click"'), # follow redirection
+			);
+    }
+
+		/**
+			* @When /^I fill the purchase cart:/
+			*/
+		public function iFillThenPurchaseCart(TableNode $table) {
+				$element_map = array(#'stock_id' => '_stock_id_edit',
+					'quantity' => 'qty',
+				);
+									
+				$steps = array();
+				foreach($table->getHash() as $row) {	
+					// Fill the edit row with each attributes.
+					foreach($row as $key => $value) {
+							if(!$value) continue;
+							$element = isset($element_map[$key])? $element_map[$key] : $key;
+							if($key == 'stock_id')
+								$steps[]= new When('I select "'.$value.'" from "'.$element.'"');
+							else
+								$steps[]= new When('I fill in "'.$element.'" with "'.$value.'"');
+					}
+					// Submit the row
+					$steps[]= new Then('I press "Add Item"');
+						 
+				}
+				return $steps;
+		}
+
+
+		/**
+		 * @When /^I wait (\d+) seconds?$/
+		 */
+		public function iWaitSeconds($timeout) {
+			$this->getSession()->wait($timeout*1000);
+		}
+
+    /**
+     * @Then /^I should have the following quantity on hands:$/
+     */
+    public function iShouldHaveTheFollowingQuantityOnHands(TableNode $table)
+    {
+			$current_date = null;
+			foreach($table->getHash() as $row) {                          
+				$qoh = get_qoh_on_date($row['stock_id']);//, $row['location'], $current_date);
+				assertEquals($row['quantity'], $qoh, "Error : ".implode($row, ', '));
+			}
+			
+    }
+
 
 }
 
