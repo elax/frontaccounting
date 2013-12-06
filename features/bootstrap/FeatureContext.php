@@ -9,6 +9,10 @@ use Behat\Gherkin\Node\PyStringNode,
 
 use Behat\Behat\Event\FeatureEvent;
 
+// Mink
+
+use Behat\MinkExtension\Context\MinkContext;
+
 //
 // Require 3rd-party libraries here:
 //
@@ -22,7 +26,7 @@ require_once('gl/includes/db/gl_db_trans.inc');
 /**
  * Features context.
  */
-class FeatureContext extends BehatContext
+class FeatureContext extends MinkContext
 {
 	/**
 	 * Initializes context.

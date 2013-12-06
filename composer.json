@@ -1,7 +1,11 @@
 {
 	"require": {
 		"behat/behat": "2.4.*@stable",
-		"phpunit/phpunit": "3.7.*"
+		"behat/mink": "1.4@stable",
+		"phpunit/phpunit": "3.7.*",
+		"behat/mink-extension": "*",
+		"behat/mink-zombie-driver": "*"
+
 	},
 	"minimum-stability": "dev",
 	"config": {
