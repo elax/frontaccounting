@@ -206,5 +206,26 @@ class FeatureContext extends MinkContext
     }
 
 
+		/**
+		 * @Then /^I should have on the Journal View:$/
+		 */
+		public function iShouldHaveOnJournalView(TableNode $table)
+		{
+			/* We check table is exactly the same as the html one,
+			 * including the header.
+			 */
+			$html_table = $this->getsession()->getPage()->find('xpath', '/body//center[2]/table');
+			assertTrue($html_table != null);
+			foreach($table->getRows() as $i => $gl_line) {
+				$row = $i+1;
+				foreach($gl_line as $j => $value) {
+					# find the value in html table
+					$column = $j+1;
+					$cell = $html_table->find('xpath', "//tr[$row]/td[$column]");
+					assertEquals($cell->getText(), $value);
+				}
+			}
+
+		}
 }
 

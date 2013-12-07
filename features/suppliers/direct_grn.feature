@@ -9,13 +9,18 @@ Feature: Direct GRN
 			| stock_id | quantity | price |
 			| A-Black | 6 | 10 | 
 			| B-Black | 5 | 100 | 
-		When "S1" do a direct GRN to "DEF":
-			| stock_id | quantity | price |
-			| B-Black | 1 | 100 | 
-		Then I should have the following quantity on hands:
+
+		When I follow "View the GL Journal Entries for this Delivery"
+		Then I should have on the Journal View:
+			| Account Code | Account Name                    | Dimension | Debit | Credit | Memo |
+			| 1510         | Inventory                       |           | 60    |        | A-Black |
+			| 1510         | Inventory                       |           | 500   |        | B-Black |
+			| 1550         | Goods Received Clearing account |           |       | 560    |         |
+
+		And I should have the following quantity on hands:
 			| stock_id | location | quantity |
-			| A-Black  | | 6        |
-			| B-Black  | DEF    | 5        |
+			| A-Black  |          | 6        |
+			| B-Black  | DEF      | 5        |
 		
 		
 
