@@ -227,5 +227,28 @@ class FeatureContext extends MinkContext
 			}
 
 		}
+
+
+    /**
+     * @When /^I void the last "([^"]*)"$/
+     */
+    public function iVoid($trans_type)
+    {
+/*
+		$this->visit('admin/void_transaction');
+		$this->selectOption('filterType', $trans_type);
+		$this->pressButton('Search');
+		$this->getSession()->wait('1000');
+		$this->pressButton('1');
+*/
+
+			global $systypes_array;
+			$flipped_types = array_flip($systypes_array);	
+			$today = Today();
+			void_transaction($flipped_types[$trans_type], 1, $today, '');
+    }
+
+
+
 }
 

@@ -1,9 +1,8 @@
 @db:en_US-ab
 Feature: Direct GRN
-	As a user I should be able to place a purchase order.
-	This order could be delivered and invoiced.
+	As a user I should be able to enter a direct GRN.
 
-	Scenario: Place Order
+	Scenario: Enter then void a GRN
 		Given I'm logged 
 		When "S1" do a direct GRN to "DEF":
 			| stock_id | quantity | price |
@@ -21,6 +20,12 @@ Feature: Direct GRN
 			| stock_id | location | quantity |
 			| A-Black  |          | 6        |
 			| B-Black  | DEF      | 5        |
+
+		When I void the last "Purchase Order Delivery"
+		Then the query "SELECT count(*) count FROM 0_gl_trans WHERE amount != 0" should return:
+			| count |
+			| 0 |
+
 		
 		
 

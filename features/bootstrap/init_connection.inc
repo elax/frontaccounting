@@ -21,17 +21,6 @@ error_reporting(-1);
 include_once($path_to_root.'/includes/main.inc');
 include_once($path_to_root . "/includes/ajax.inc");
 
-// Ajax communication object
-$Ajax = new Ajax();
-// js/php validation rules container
-$Validate = array();
-// bindings for editors
-$Editors = array();
-// page help. Currently help for function keys.
-$Pagehelp = array();
-
-$Refs = new references();
-
 function display_notification($msg)
 {
 	echo $msg."\n";
@@ -61,7 +50,18 @@ if (!isset($_SESSION["wa_current_user"]))
 	$_SESSION["wa_current_user"] = new current_user();
 
 function init_db_connection() {
-	global $db_connections, $def_coy;
+	global $db_connections, $def_coy, $Refs, $Ajax, $Validate, $Editors, $PageHelp ;
+// Ajax communication object
+$Ajax = new Ajax();
+// js/php validation rules container
+$Validate = array();
+// bindings for editors
+$Editors = array();
+// page help. Currently help for function keys.
+$Pagehelp = array();
+
+
+$Refs = new references();
 	$def_coy = 0;
 	$tb_pref_counter = 1;
 	$db_connections = array (
