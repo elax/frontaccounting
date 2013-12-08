@@ -23,7 +23,13 @@ Feature:
 			| B-Black | 2 | 100 | 
 			| A-Red | 3 | 10 | 
 			| B-Red | 4 | 100 | 
-		Then show last response
+		When I press "Process Invoice"
+		Then I should have the following quantity on hands:
+			| stock_id | location | quantity |
+			| A-Black  |          | 1        |
+			| A-Red    |          | 3        |
+			| B-Black  | DEF      | 2        |
+			| B-Red    | DEF      | 4        |
 
 
 
