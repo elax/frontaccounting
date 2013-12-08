@@ -1790,7 +1790,7 @@ CREATE TABLE `0_users` (
 ### Data of table `0_users` ###
 
 INSERT INTO `0_users` VALUES
-('1', 'admin', '83878c91171338902e0fe0fb97a8c47a', 'Administrator', '2', '', 'adm@adm.com', NULL, '0', '0', '0', '0', 'default', 'Letter', '2', '2', '4', '1', '1', '0', '0', '2013-11-24 20:12:56', '10', '1', '1', '1', '1', '0', 'orders', '0');
+('1', 'admin', '5f4dcc3b5aa765d61d8327deb882cf99', 'Administrator', '2', '', 'adm@adm.com', NULL, '0', '0', '0', '0', 'default', 'Letter', '2', '2', '4', '1', '1', '0', '0', '2013-11-24 20:12:56', '10', '1', '1', '1', '1', '0', 'orders', '0');
 
 ### Structure of table `0_voided` ###
 

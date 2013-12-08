@@ -152,7 +152,7 @@ class FeatureContext extends MinkContext
 			return array(
 				new Given('I am on "/"'),
 				new Then('I fill in "user_name_entry_field" with "admin"'),
-				new Then('I fill in "password" with "p"'),
+				new Then('I fill in "password" with "password"'),
 				new Then('I press "Login"')
 			);
     }
