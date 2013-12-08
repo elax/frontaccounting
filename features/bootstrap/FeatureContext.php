@@ -69,6 +69,34 @@ class FeatureContext extends MinkContext
 		 return	$route;
 	}
 
+	/**
+	 * @Transform /^table:.*type,.*$/
+	 * Replace FA transaction type constants by their value
+	 * Ex ST_SUPPRECEIVE -> 25
+	 */
+	public function transformTransaction_type(TableNode $table)
+	{
+		$new_table = new TableNode();
+		# first we need to get the index of the type column
+		$index = 0;
+		foreach($table->getRows() as $row) {
+			if(is_null($index)) {
+				$flipped_header = array_flip($row);
+				$index = $flipped_row['type'];
+			}
+			else {
+
+				$value = $row[$index];
+				$new_value = constant($value);
+				if(is_null($new_value) == false) $row[$index]=$new_value;
+			}
+			$new_table->addRow($row);
+		}
+
+		return $new_table;
+	}
+
+
 
 		public static function initConnection() {
 			if(self::$db_connection) {
@@ -139,7 +167,7 @@ class FeatureContext extends MinkContext
 			}
 				$row = db_fetch($query);
 			// we shouldn't have any row left
-				assertEquals(false, $row);
+				assertEquals(false, $row, 'More row returns by the query');
 			
     }
 

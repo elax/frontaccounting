@@ -32,6 +32,15 @@ Feature:
 			| A-Red    | WH1      | 3        |
 			| B-Black  | WH1      | 2        |
 			| B-Red    | WH1      | 4        |
+			
+		Then the query "SELECT type, account, memo_ as memo,  amount FROM 0_gl_trans" should return:
+			| type | account | memo | amount |
+			| ST_SUPPRECEIVE | 1510 | A-Black | 10 |
+			| ST_SUPPRECEIVE | 1510 | B-Black | 200 |
+			| ST_SUPPRECEIVE | 1510 | A-Red   | 30 |
+			| ST_SUPPRECEIVE | 1510 | B-Red   | 400 |
+			| ST_SUPPRECEIVE | 1550 |         | -640 |
+			
 
 
 
