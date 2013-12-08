@@ -212,7 +212,7 @@ class FeatureContext extends MinkContext
     {
 			$current_date = null;
 			foreach($table->getHash() as $row) {                          
-				$qoh = get_qoh_on_date($row['stock_id']);//, $row['location'], $current_date);
+				$qoh = get_qoh_on_date($row['stock_id'], $row['location'], $current_date);
 				assertEquals($row['quantity'], $qoh, "Error : ".implode($row, ', '));
 			}
 			

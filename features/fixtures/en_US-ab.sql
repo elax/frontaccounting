@@ -854,7 +854,11 @@ INSERT INTO `0_loc_stock` VALUES
 ('DEF', 'A-Black', '0'),
 ('DEF', 'A-Red', '0'),
 ('DEF', 'B-Black', '0'),
-('DEF', 'B-Red', '0');
+('DEF', 'B-Red', '0'),
+('WH1', 'A-Black', '0'),
+('WH1', 'A-Red', '0'),
+('WH1', 'B-Black', '0'),
+('WH1', 'B-Red', '0');
 
 ### Structure of table `0_locations` ###
 
@@ -876,7 +880,10 @@ CREATE TABLE `0_locations` (
 ### Data of table `0_locations` ###
 
 INSERT INTO `0_locations` VALUES
-('DEF', 'Default', 'N/A', '', '', '', '', '', '0');
+('DEF', 'Default', 'N/A', '', '', '', '', '', '0'),
+('WH1', 'Warehouse 1', 'N/A', '', '', '', '', '', '0'),
+('WH2', 'Warehouse 2', 'N/A', '', '', '', '', '', '0'),
+('WH3', 'Warehouse 3', 'N/A', '', '', '', '', '', '0');
 
 ### Structure of table `0_movement_types` ###
 
