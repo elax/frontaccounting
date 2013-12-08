@@ -262,6 +262,26 @@ class FeatureContext extends MinkContext
     }
 
 
+    /**
+     * @When /^I fill in or select the following:$/
+     */
+    public function iFillInOrSelectTheFollowing(TableNode $fields)
+    {
+        foreach ($fields->getRowsHash() as $locator => $value) {
+        $locator = $this->fixStepArgument($locator);
+        $value = $this->fixStepArgument($value);
+					$field = $this->getSession()->getPage()->findField($locator);
+					if($field->getTagName() == 'select')
+						$field->selectOption($value);
+					else // normal
+						$field->setValue($value);
+
+					
+
+        }
+    }
+
+
 
 }
 
