@@ -55,6 +55,20 @@ class FeatureContext extends MinkContext
 			return floatval($string);
 		}
 
+	static $routeMap = array(
+		'Purchases/Direct_Invoice' => '/purchasing/po_entry_items.php?NewInvoice=Yes',
+		'Purchases/Direct_GRN' => '/purchasing/po_entry_items.php?NewGRN=Yes'
+	);
+		/** 
+		 * @Transform /(.+\/.*)/
+		 */
+	public function transformRouteToUrl($route) {
+		if(isset(self::$routeMap[$route]))
+			return self::$routeMap[$route] ;
+		else
+		 return	$route;
+	}
+
 
 		public static function initConnection() {
 			if(self::$db_connection) {
@@ -92,7 +106,6 @@ class FeatureContext extends MinkContext
 			}
 		}
 	}
-
 
 
 
@@ -150,7 +163,7 @@ class FeatureContext extends MinkContext
     public function doADirectGrnToDef($supplier, TableNode $table)
     {
 			return array(
-				new Given('I am on "purchasing/po_entry_items.php?NewGRN=Yes"'),
+				new Given('I am on "Purchases/Direct_GRN"'),
 				new Given('I select "S1" from "supplier_id"'),
 				new When('I fill the purchase cart:', $table),
 				new Then('I press "Process GRN"'),
