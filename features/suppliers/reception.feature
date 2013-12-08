@@ -35,11 +35,25 @@ Feature:
 			
 		Then the query "SELECT type, account, memo_ as memo,  amount FROM 0_gl_trans" should return:
 			| type | account | memo | amount |
-			| ST_SUPPRECEIVE | 1510 | A-Black | 10 |
+			| ST_SUPPRECEIVE | 1510 | A-Black | 10 | # inventory
 			| ST_SUPPRECEIVE | 1510 | B-Black | 200 |
 			| ST_SUPPRECEIVE | 1510 | A-Red   | 30 |
 			| ST_SUPPRECEIVE | 1510 | B-Red   | 400 |
-			| ST_SUPPRECEIVE | 1550 |         | -640 |
+			| ST_SUPPRECEIVE | 1550 |         | -640 | GRN clearance
+			# Invoice
+			| ST_SUPPINVOICE | 2150 |         | 32 |
+			| ST_SUPPINVOICE | 2100 |         | -672 |
+			| ST_SUPPINVOICE | 1550 |         | 10 |
+			| ST_SUPPINVOICE | 1550 |         | 200 |
+			| ST_SUPPINVOICE | 1550 |         | 30 |
+			| ST_SUPPINVOICE | 1550 |         | 400 |
+			
+		Then the query "SELECT account, SUM(amount) AS amount FROM 0_gl_trans GROUP BY account" should return:
+			| account | amount |
+			| 1510    | 640    |
+			| 1550    |  0     |
+			| 2100    | -672   |
+		  | 2150    | 32     |
 			
 
 
