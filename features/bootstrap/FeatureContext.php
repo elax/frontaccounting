@@ -17,6 +17,7 @@ use Behat\Behat\Context\Step\Given,
 // Mink
 
 use Behat\MinkExtension\Context\MinkContext;
+use Behat\Mink\Exception\ElementNotFoundException;
 
 //
 // Require 3rd-party libraries here:
@@ -57,7 +58,8 @@ class FeatureContext extends MinkContext
 
 	static $routeMap = array(
 		'Purchases/Direct_Invoice' => '/purchasing/po_entry_items.php?NewInvoice=Yes',
-		'Purchases/Direct_GRN' => '/purchasing/po_entry_items.php?NewGRN=Yes'
+		'Purchases/Direct_GRN' => '/purchasing/po_entry_items.php?NewGRN=Yes',
+		'Purchases/Supplier_Invoices' => '/purchasing/supplier_invoice.php?New=1',
 	);
 		/** 
 		 * @Transform /(.+\/.*)/
@@ -299,6 +301,9 @@ class FeatureContext extends MinkContext
         $locator = $this->fixStepArgument($locator);
         $value = $this->fixStepArgument($value);
 					$field = $this->getSession()->getPage()->findField($locator);
+				if(is_null($field)) throw new ElementNotFoundException($this->getSession(),
+					'form field', 'id|name|label|value', $locator
+				);
 					if($field->getTagName() == 'select')
 						$field->selectOption($value);
 					else // normal
