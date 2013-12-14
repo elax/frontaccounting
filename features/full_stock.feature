@@ -19,7 +19,9 @@ Feature: Full Stock
 			| currency | date | rate |
 			| GBP | 12/01/2013 | 0.65 |
 			| GBP | 12/02/2013 | 0.70 |
-			# A-Black +4, A-Red +6, B-Black+1  B-Red +5 GBPUSD = 1.50 
+
+		# A-Black +4, A-Red +6, B-Black+1  B-Red +5 GBPUSD = 1.50 
+		And I am on "Purchases/Direct_GRN"
 		When I fill the purchase cart:
 			| stock_id | quantity | price |
 			| A-Black | 15 | 4 | 
@@ -32,6 +34,14 @@ Feature: Full Stock
 			| supp_ref  | 1          |
 			| StkLocation | DEF      |
 		When I press "Process GRN"
+		Then the query "SELECT type, account, memo_ as memo,  amount FROM 0_gl_trans WHERE tran_date = '2013-12-01'" should return:
+			| type | account | memo | amount |
+			| ST_SUPPRECEIVE | 1510 | A-Black | 39 |
+			| ST_SUPPRECEIVE | 1510 | B-Black | 97.50 |
+			| ST_SUPPRECEIVE | 1510 | A-Red   | 117 |
+			| ST_SUPPRECEIVE | 1510 | B-Red   | 650 |
+			| ST_SUPPRECEIVE | 1550 |         | -903.5 |
+
 
 		# Invoce GBPUSD = 1.60
 		# Transfer A-Black 4 -> WH1
