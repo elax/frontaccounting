@@ -14,7 +14,25 @@ Feature: Full Stock
 		# fill negative stock so q=0 and q > 0
 		#
 		#
-		# A-Black +4, A-Red +6, B-Black+1  A-Red +5 GBPUSD = 1.50 
+		Given I'm logged
+		Given I have the following exchange rates:
+			| currency | date | rate |
+			| GBP | 12/01/2013 | 0.65 |
+			| GBP | 12/02/2013 | 0.70 |
+			# A-Black +4, A-Red +6, B-Black+1  B-Red +5 GBPUSD = 1.50 
+		When I fill the purchase cart:
+			| stock_id | quantity | price |
+			| A-Black | 15 | 4 | 
+			| B-Black | 150 | 1 | 
+			| A-Red | 30 | 6 | 
+			| B-Red | 200 | 5 | 
+		And I fill in or select the following:
+			| supplier_id | S2 |
+			| OrderDate | 12/01/2013 |
+			| supp_ref  | 1          |
+			| StkLocation | DEF      |
+		When I press "Process GRN"
+
 		# Invoce GBPUSD = 1.60
 		# Transfer A-Black 4 -> WH1
 		#

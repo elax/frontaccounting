@@ -316,6 +316,18 @@ class FeatureContext extends MinkContext
     }
 
 
+		/**
+			* @Given /^I have the following exchange rates:$/
+     */
+    public function iHaveTheFollowingExchangeRates(TableNode $table)
+    {
+			foreach($table->getHash() as $row) {
+				add_exchange_rate($row['currency'], $row['date'], $row['rate'], $row['rate']);
+
+			}
+    }
+
+
 
 }
 
