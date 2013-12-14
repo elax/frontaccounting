@@ -116,6 +116,30 @@ Feature:
 			| ST_SUPPINVOICE | 1550 |         | 210 |
 			| ST_SUPPINVOICE | 1550 |         | 3880 |
 
+		@wip @order
+	Scenario: Order + GRN + Invoice
+		Given pending : process doesn't work for some reason
+		Given I'm logged
+		Given I am on "Purchases/Purchase_Order_Entry"
+		When I fill the purchase cart:
+			| stock_id | quantity | price |
+			| A-Red | 10 | 7 | 
+			| B-Red | 5 | 102 | 
+		And I fill in or select the following:
+			| supplier_id | S1 |
+			| supp_ref | from order |
+			| OrderDate | 12/08/2013 |
+			| StkLocation | WH3      |
+		When I press "Place Order"
+		And I follow "click"
+
+		# Delivery
+		When I follow "Receive Items on this Purchase Order"
+		And show last response
+		#
+		And I press "Process Receive Items"
+		Then print last response
+	
 		 
 			
 

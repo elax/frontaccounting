@@ -57,6 +57,7 @@ class FeatureContext extends MinkContext
 		}
 
 	static $routeMap = array(
+		'Purchases/Purchase_Order_Entry' => '/purchasing/po_entry_items.php?NewOrder=Yes',
 		'Purchases/Direct_Invoice' => '/purchasing/po_entry_items.php?NewInvoice=Yes',
 		'Purchases/Direct_GRN' => '/purchasing/po_entry_items.php?NewGRN=Yes',
 		'Purchases/Supplier_Invoices' => '/purchasing/supplier_invoice.php?New=1',
