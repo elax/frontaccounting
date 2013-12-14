@@ -42,8 +42,22 @@ Feature: Full Stock
 			| ST_SUPPRECEIVE | 1510 | B-Red   | 650 |
 			| ST_SUPPRECEIVE | 1550 |         | -903.5 |
 
-
 		# Invoce GBPUSD = 1.60
+		When I am on "Purchases/Supplier_Invoices"
+		And I fill in or select the following:
+		# We need to set the date before the supplier
+		# so that the correct date is used to find the exchange rate
+			| tran_date | 12/02/2013 |
+			| due_date  | 01/10/2014 |
+			| supp_reference  | 1          |
+			| reference | 1          |
+		And I select "S2" from "supplier_id"
+		And I wait 10 seconds
+		Then show last response
+		Then I should see "A-Black"
+		And I press "Add All Items"
+		When I press "Enter Invoice"
+
 		# Transfer A-Black 4 -> WH1
 		#
 		# A-Black => -0 A-Red -12, B-Black -1, B-Red -10
